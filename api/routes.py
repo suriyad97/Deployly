@@ -1,13 +1,11 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from backend.services.vercel import deploy_to_vercel
+from typing import Dict
 import os
+import openai
+import re
 
 router = APIRouter()
-
-from typing import Dict
-
-from typing import Dict
 
 class GenerateRequest(BaseModel):
     prompt: str
@@ -15,23 +13,38 @@ class GenerateRequest(BaseModel):
 class GeneratedFilesResponse(BaseModel):
     files: Dict[str, str]
 
-class DeployRequest(BaseModel):
-    files: Dict[str, str]
-
-class DeployResponse(BaseModel):
-    deployment_url: str
+async def generate_files_with_gpt4(prompt: str) -> Dict[str, str]:
+    """
+    Generate a realistic e-commerce website codebase using GPT-4, including frontend, backend, and Supabase integration.
+    """
+    system_prompt = (
+        "You are an expert full-stack developer. Generate a minimal but realistic e-commerce website for the following prompt:"
+    )
+    user_prompt = (
+        f"Prompt: {prompt}\n"
+        "Generate the following files as code blocks:\n"
+        "- index.html (with links to style.css and main.js)\n"
+        "- style.css (excellent styling)\n"
+        "- main.js (product listing, cart logic, fetches from /api/products)\n"
+        "- api.py (FastAPI backend with /api/products endpoint, using Supabase for product data)\n"
+        "- supabase_setup.sql (SQL for Supabase products table and some sample data)\n"
+        "Respond with each file as:\n--- filename ---\n<code>\n--- end ---\n"
+    )
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    response = await openai.ChatCompletion.acreate(
+        model="gpt-4o",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ],
+        max_tokens=2048,
+        temperature=0.5
+    )
+    content = response["choices"][0]["message"]["content"]
+    files = {filename.strip(): code.strip() for filename, code in re.findall(r"--- ([^\s]+) ---\n([\s\S]*?)--- end ---", content)}
+    return files
 
 @router.post("/generate-website", response_model=GeneratedFilesResponse)
 async def generate_website(payload: GenerateRequest):
-    # Use the user prompt to generate files (stub: just index.html)
-    generated_files = {
-        "index.html": f"<html><body><h1>{payload.prompt}</h1></body></html>"
-    }
-    return GeneratedFilesResponse(files=generated_files)
-
-@router.post("/deploy-website", response_model=DeployResponse)
-async def deploy_website(payload: DeployRequest):
-    project_name = f"deployly-{os.urandom(4).hex()}"
-    url = await deploy_to_vercel(project_name, payload.files)
-    return DeployResponse(deployment_url=f"https://{url}")
-
+    files = await generate_files_with_gpt4(payload.prompt)
+    return GeneratedFilesResponse(files=files)
