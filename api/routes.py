@@ -20,7 +20,3 @@ async def generate_website(payload: GenerateRequest):
     url = await deploy_to_vercel(project_name, payload.files)
     return GenerateResponse(deployment_url=f"https://{url}")
 
-@router.post("/test-gpt4")
-async def test_gpt4_endpoint(payload: GPT4Prompt):
-    result = await test_gpt4(payload.prompt)
-    return {"gpt4_response": result}
