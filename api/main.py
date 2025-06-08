@@ -5,6 +5,16 @@ from routers import gpt, customers, inventory, payments, stores
 from backend.services.gpt import test_gpt4
 app = FastAPI(title="Deployly Backend API")
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Change this to specific domains in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(gpt.router, prefix="/gpt", tags=["GPT-4 Logic"])
 app.include_router(customers.router, prefix="/customers", tags=["Customers"])
 app.include_router(inventory.router, prefix="/inventory", tags=["Inventory"])
