@@ -1,3 +1,13 @@
+from fastapi import APIRouter, HTTPException
+import os
+import openai
+from fastapi import Body
+from dotenv import load_dotenv
+
+load_dotenv()
+
+router = APIRouter()
+
 async def generate_files_with_gpt4(prompt: str) -> dict:
     client = openai.AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     system_prompt = (
@@ -9,7 +19,7 @@ async def generate_files_with_gpt4(prompt: str) -> dict:
         "2. Create Order: POST https://pluraluat.v2.pinepg.in/api/pay/v1/orders with order, customer, and amount details. "
         "3. Create Payment: POST https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{orderId}/payments with payment method and payment option details. "
         "4. Fetch Order: GET https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{orderId} to check payment status. "
-        "5. (Optional) Capture Payment: PUT https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{orderId}/capture for post-auth flows. "
+        "5. Capture Payment: PUT https://pluraluat.v2.pinepg.in/api/pay/v1/orders/{orderId}/capture for post-auth flows. "
         "Use Bearer tokens for authentication in all requests. Follow the request and response JSON schemas as per the Pinelabs API documentation. "
         "Add all necessary frontend and backend code to support Pinelabs integration. Do not use any other payment gateway. "
         "Always generate an admin dashboard as part of the project. The admin dashboard must allow management of all products, view and edit users, and track all payments made through the site (including Pinelabs payments). The dashboard UI and backend must be fully aligned with the generated codebase and database schema, and must be accessible only to authenticated admin users. "
@@ -30,3 +40,15 @@ async def generate_files_with_gpt4(prompt: str) -> dict:
     import re
     files = {filename.strip(): code.strip() for filename, code in re.findall(r"--- ([^\s]+) ---\n([\s\S]*?)--- end ---", content)}
     return files
+
+@router.post("/generate-files")
+async def generate_files(prompt: str = Body(..., embed=True)):
+    try:
+        files = await generate_files_with_gpt4(prompt)
+        return {"files": files}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/health")
+async def health_check():
+    return {"status": "ok"}
