@@ -3,6 +3,7 @@ from backend.models.schemas import BusinessDescription, Store, Product, Customer
 from pydantic import BaseModel
 from typing import Optional
 from backend.services.vercel import deploy_to_vercel
+from backend.services.gpt import test_gpt4
 import os
 
 router = APIRouter()
@@ -21,6 +22,9 @@ class GenerateRequest(BaseModel):
 
 class GenerateResponse(BaseModel):
     deployment_url: str
+
+class GPT4Prompt(BaseModel):
+    prompt: str
 
 @router.post("/business/submit")
 def submit_business_description(payload: BusinessDescription):
@@ -117,3 +121,8 @@ async def generate_website(payload: GenerateRequest):
     project_name = f"deployly-{os.urandom(4).hex()}"
     url = await deploy_to_vercel(project_name, generated_files)
     return GenerateResponse(deployment_url=f"https://{url}")
+
+@router.post("/test-gpt4")
+async def test_gpt4_endpoint(payload: GPT4Prompt):
+    result = await test_gpt4(payload.prompt)
+    return {"gpt4_response": result}
