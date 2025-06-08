@@ -3,8 +3,9 @@ from pydantic import BaseModel
 from typing import Dict
 import os
 import openai
+from dotenv import load_dotenv
+load_dotenv()
 import re
-
 router = APIRouter()
 
 class GenerateRequest(BaseModel):
@@ -13,10 +14,13 @@ class GenerateRequest(BaseModel):
 class GeneratedFilesResponse(BaseModel):
     files: Dict[str, str]
 
-async def generate_files_with_gpt4(prompt: str) -> Dict[str, str]:
-    """
-    Generate a realistic e-commerce website codebase using GPT-4, including frontend, backend, and Supabase integration.
-    """
+@router.post("/generate-website", response_model=GeneratedFilesResponse)
+async def generate_website(payload: GenerateRequest):
+    files = await generate_files_with_gpt4(payload.prompt)
+    return GeneratedFilesResponse(files=files)
+
+async def generate_files_with_gpt4(prompt: str) -> dict:
+    client = openai.AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     system_prompt = (
         "You are an expert full-stack developer. Generate a minimal but realistic e-commerce website for the following prompt:"
     )
@@ -30,8 +34,7 @@ async def generate_files_with_gpt4(prompt: str) -> Dict[str, str]:
         "- supabase_setup.sql (SQL for Supabase products table and some sample data)\n"
         "Respond with each file as:\n--- filename ---\n<code>\n--- end ---\n"
     )
-    openai.api_key = os.getenv("OPENAI_API_KEY")
-    response = await openai.ChatCompletion.acreate(
+    response = await client.chat.completions.create(
         model="gpt-4o",
         messages=[
             {"role": "system", "content": system_prompt},
@@ -40,11 +43,6 @@ async def generate_files_with_gpt4(prompt: str) -> Dict[str, str]:
         max_tokens=2048,
         temperature=0.5
     )
-    content = response["choices"][0]["message"]["content"]
+    content = response.choices[0].message.content
     files = {filename.strip(): code.strip() for filename, code in re.findall(r"--- ([^\s]+) ---\n([\s\S]*?)--- end ---", content)}
     return files
-
-@router.post("/generate-website", response_model=GeneratedFilesResponse)
-async def generate_website(payload: GenerateRequest):
-    files = await generate_files_with_gpt4(payload.prompt)
-    return GeneratedFilesResponse(files=files)
