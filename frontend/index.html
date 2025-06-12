@@ -4,269 +4,322 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deployly - AI Website Generator</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
-<body class="bg-gray-50 overflow-x-hidden">
+<body class="bg-dark overflow-x-hidden">
     <!-- Navigation -->
-    <nav class="nav-glass backdrop-blur-md bg-white/80 shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center nav-brand">
-                    <div class="icon-container">
-                        <i class="fas fa-rocket text-purple-600 text-2xl mr-3"></i>
-                    </div>
-                    <h1 class="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">Deployly</h1>
+    <nav class="nav-container">
+        <div class="nav-content">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <div class="icon-glow"></div>
+                    <i class="fas fa-rocket"></i>
                 </div>
-                <div class="flex space-x-4">
-                    <button class="nav-btn text-gray-600 hover:text-purple-600 transition-all duration-300 px-4 py-2 rounded-lg hover:bg-purple-50">
-                        <i class="fas fa-history mr-2"></i>History
-                    </button>
-                    <button class="nav-btn bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                        <i class="fas fa-user mr-2"></i>Account
-                    </button>
-                </div>
+                <span class="brand-text">Deployly</span>
+            </div>
+            <div class="nav-actions">
+                <button class="nav-btn secondary">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </button>
+                <button class="nav-btn primary">
+                    <i class="fas fa-user"></i>
+                    <span>Account</span>
+                </button>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero-section relative overflow-hidden">
-        <div class="hero-bg absolute inset-0"></div>
-        <div class="floating-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-            <div class="shape shape-3"></div>
-            <div class="shape shape-4"></div>
+    <section class="hero-section">
+        <div class="hero-background">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+            <div class="grid-pattern"></div>
         </div>
-        <div class="relative z-10 max-w-4xl mx-auto text-center px-4 py-20">
-            <h2 class="hero-title text-6xl font-bold mb-6 text-white leading-tight">
-                Generate & Deploy<br>
-                <span class="text-gradient">Websites with AI</span>
-            </h2>
-            <p class="hero-subtitle text-xl mb-8 text-white/90 max-w-2xl mx-auto leading-relaxed">
-                Describe your business and get a fully functional e-commerce website deployed in minutes
+        
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-icon">✨</span>
+                <span>Powered by GPT-4</span>
+            </div>
+            
+            <h1 class="hero-title">
+                Build & Deploy
+                <span class="gradient-text">AI Websites</span>
+                in Minutes
+            </h1>
+            
+            <p class="hero-subtitle">
+                Transform your business idea into a fully functional e-commerce website with AI. 
+                No coding required, just describe your vision.
             </p>
-            <div class="hero-features flex justify-center space-x-8 flex-wrap gap-4">
-                <div class="feature-badge flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 text-white">
-                    <i class="fas fa-check-circle mr-2 text-green-400"></i>
-                    <span>AI-Powered</span>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Websites Created</div>
                 </div>
-                <div class="feature-badge flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 text-white">
-                    <i class="fas fa-check-circle mr-2 text-green-400"></i>
-                    <span>Instant Deploy</span>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Uptime</div>
                 </div>
-                <div class="feature-badge flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-3 text-white">
-                    <i class="fas fa-check-circle mr-2 text-green-400"></i>
-                    <span>Payment Ready</span>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <div class="stat-number">< 2min</div>
+                    <div class="stat-label">Deploy Time</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Main Generator -->
-    <section class="py-20 relative">
-        <div class="max-w-4xl mx-auto px-4">
-            <div class="generator-card bg-white rounded-3xl shadow-2xl p-8 backdrop-blur-sm border border-white/20">
-                <h3 class="text-4xl font-bold text-center mb-8 text-gray-800">Describe Your Business</h3>
+    <!-- Generator Section -->
+    <section class="generator-section">
+        <div class="section-container">
+            <div class="generator-card">
+                <div class="card-header">
+                    <h2 class="card-title">Describe Your Vision</h2>
+                    <p class="card-subtitle">Our AI will transform your business description into a complete website</p>
+                </div>
                 
-                <form id="generateForm" class="space-y-8">
-                    <div class="form-group">
-                        <label for="businessDescription" class="block text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
-                            Business Description
-                        </label>
-                        <div class="input-container">
-                            <textarea 
-                                id="businessDescription" 
-                                rows="6" 
-                                class="modern-input w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 resize-none transition-all duration-300"
-                                placeholder="Describe your business, products, target audience, and any specific features you want..."
-                                required
-                            ></textarea>
+                <form id="generateForm" class="generator-form">
+                    <div class="form-row">
+                        <div class="input-group full-width">
+                            <label class="input-label">
+                                <i class="fas fa-lightbulb"></i>
+                                Business Description
+                            </label>
+                            <div class="textarea-container">
+                                <textarea 
+                                    id="businessDescription" 
+                                    class="form-textarea"
+                                    placeholder="Describe your business, products, target audience, and specific features you want. Be as detailed as possible for better results..."
+                                    rows="6"
+                                    required
+                                ></textarea>
+                                <div class="textarea-counter">
+                                    <span id="charCount">0</span> / 1000
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="form-group">
-                            <label for="projectName" class="block text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
+                    <div class="form-row">
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-tag"></i>
                                 Project Name
                             </label>
-                            <div class="input-container">
-                                <input 
-                                    type="text" 
-                                    id="projectName" 
-                                    class="modern-input w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300"
-                                    placeholder="my-awesome-store"
-                                    required
-                                >
-                            </div>
+                            <input 
+                                type="text" 
+                                id="projectName" 
+                                class="form-input"
+                                placeholder="my-awesome-store"
+                                required
+                            >
                         </div>
-                        <div class="form-group">
-                            <label for="theme" class="block text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">
-                                Theme Preference
+                        
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-palette"></i>
+                                Design Style
                             </label>
-                            <div class="input-container">
-                                <select 
-                                    id="theme" 
-                                    class="modern-input w-full px-6 py-4 border-2 border-gray-200 rounded-2xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 transition-all duration-300"
-                                >
-                                    <option value="modern">Modern</option>
-                                    <option value="minimal">Minimal</option>
-                                    <option value="colorful">Colorful</option>
-                                    <option value="professional">Professional</option>
+                            <div class="select-container">
+                                <select id="theme" class="form-select">
+                                    <option value="modern">Modern & Clean</option>
+                                    <option value="minimal">Minimal & Elegant</option>
+                                    <option value="colorful">Bold & Colorful</option>
+                                    <option value="professional">Professional & Corporate</option>
+                                    <option value="creative">Creative & Artistic</option>
                                 </select>
+                                <i class="fas fa-chevron-down select-arrow"></i>
                             </div>
                         </div>
                     </div>
                     
-                    <button 
-                        type="submit" 
-                        id="generateBtn"
-                        class="generate-btn w-full bg-gradient-to-r from-purple-600 via-blue-600 to-purple-600 text-white py-5 px-8 rounded-2xl font-bold text-lg transition-all duration-500 transform hover:scale-105 hover:shadow-2xl relative overflow-hidden"
-                    >
-                        <span class="btn-text flex items-center justify-center">
-                            <i class="fas fa-magic mr-3"></i>
-                            Generate Website
-                        </span>
-                        <div class="btn-loading hidden">
-                            <div class="loading-spinner"></div>
-                            <span>Generating...</span>
+                    <button type="submit" id="generateBtn" class="generate-button">
+                        <div class="button-content">
+                            <div class="button-icon">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <span class="button-text">Generate Website</span>
                         </div>
+                        <div class="button-loading hidden">
+                            <div class="loading-spinner"></div>
+                            <span>Creating Magic...</span>
+                        </div>
+                        <div class="button-glow"></div>
                     </button>
                 </form>
             </div>
         </div>
     </section>
 
-    <!-- Loading Modal -->
-    <div id="loadingModal" class="loading-modal fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-all duration-500">
-        <div class="loading-card bg-white rounded-3xl p-8 max-w-md mx-4 text-center transform scale-75">
-            <div class="loading-animation mb-6">
-                <div class="loading-circle"></div>
-                <div class="loading-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-            <h3 class="text-2xl font-bold mb-3 text-gray-800">Generating Your Website</h3>
-            <p class="text-gray-600 leading-relaxed">AI is creating your custom website with all the features you requested...</p>
-            <div class="progress-bar mt-6">
-                <div class="progress-fill"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Results Section -->
-    <div id="resultsSection" class="results-section py-20 bg-gradient-to-br from-gray-50 to-blue-50 opacity-0 pointer-events-none transition-all duration-700">
-        <div class="max-w-6xl mx-auto px-4">
-            <h3 class="text-4xl font-bold text-center mb-12 text-gray-800">Your Website is Ready!</h3>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Preview -->
-                <div class="preview-card bg-white rounded-3xl shadow-2xl p-6 transform">
-                    <h4 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
-                        <i class="fas fa-eye mr-3 text-purple-600"></i>
-                        Preview
-                    </h4>
-                    <div class="preview-container border-2 border-gray-200 rounded-2xl overflow-hidden bg-gray-100">
-                        <div class="browser-bar bg-gray-300 px-4 py-2 flex items-center space-x-2">
-                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
-                            <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                            <div class="flex-1 bg-white rounded ml-4 px-3 py-1 text-xs text-gray-600">
-                                localhost:3000
-                            </div>
-                        </div>
-                        <iframe id="previewFrame" class="w-full h-96 bg-white"></iframe>
-                    </div>
-                </div>
-                
-                <!-- Actions -->
-                <div class="space-y-6">
-                    <div class="action-card bg-white rounded-3xl shadow-2xl p-6 transform">
-                        <h4 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
-                            <i class="fas fa-rocket mr-3 text-green-600"></i>
-                            Deployment
-                        </h4>
-                        <div class="space-y-4">
-                            <button id="deployBtn" class="deploy-btn w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 px-6 rounded-2xl font-bold text-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                                <i class="fas fa-cloud-upload-alt mr-3"></i>
-                                Deploy to Vercel
-                            </button>
-                            <div id="deploymentUrl" class="deployment-result hidden bg-green-50 border-2 border-green-200 rounded-2xl p-4">
-                                <p class="text-sm font-semibold text-green-800 mb-2">🎉 Deployment Successful!</p>
-                                <a id="deploymentLink" href="#" target="_blank" class="text-green-600 hover:text-green-800 font-medium break-all hover:underline"></a>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="files-card bg-white rounded-3xl shadow-2xl p-6 transform">
-                        <h4 class="text-2xl font-bold mb-6 text-gray-800 flex items-center">
-                            <i class="fas fa-code mr-3 text-blue-600"></i>
-                            Generated Files
-                        </h4>
-                        <div id="filesList" class="space-y-3 max-h-80 overflow-y-auto custom-scrollbar">
-                            <!-- Files will be populated here -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Features Section -->
-    <section class="features-section py-20 bg-white relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-purple-50 to-blue-50 opacity-50"></div>
-        <div class="relative z-10 max-w-6xl mx-auto px-4">
-            <h3 class="text-4xl font-bold text-center mb-16 text-gray-800">Why Choose Deployly?</h3>
+    <section class="features-section">
+        <div class="section-container">
+            <div class="section-header">
+                <h2 class="section-title">Why Choose Deployly?</h2>
+                <p class="section-subtitle">Everything you need to launch your online business</p>
+            </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="feature-card text-center p-8 bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
-                    <div class="feature-icon bg-gradient-to-br from-purple-500 to-purple-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                        <i class="fas fa-brain text-white text-3xl"></i>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon ai">
+                        <i class="fas fa-brain"></i>
                     </div>
-                    <h4 class="text-2xl font-bold mb-4 text-gray-800">AI-Powered Generation</h4>
-                    <p class="text-gray-600 leading-relaxed">Advanced GPT-4 technology creates custom websites tailored to your business needs with intelligent design decisions</p>
+                    <h3 class="feature-title">AI-Powered</h3>
+                    <p class="feature-description">Advanced GPT-4 creates custom websites tailored to your exact business needs</p>
                 </div>
                 
-                <div class="feature-card text-center p-8 bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
-                    <div class="feature-icon bg-gradient-to-br from-blue-500 to-blue-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                        <i class="fas fa-rocket text-white text-3xl"></i>
+                <div class="feature-card">
+                    <div class="feature-icon deploy">
+                        <i class="fas fa-rocket"></i>
                     </div>
-                    <h4 class="text-2xl font-bold mb-4 text-gray-800">Instant Deployment</h4>
-                    <p class="text-gray-600 leading-relaxed">Deploy your website to Vercel with a single click and go live in seconds with global CDN distribution</p>
+                    <h3 class="feature-title">Instant Deploy</h3>
+                    <p class="feature-description">Go live in seconds with global CDN and automatic SSL certificates</p>
                 </div>
                 
-                <div class="feature-card text-center p-8 bg-white rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2">
-                    <div class="feature-icon bg-gradient-to-br from-green-500 to-green-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
-                        <i class="fas fa-credit-card text-white text-3xl"></i>
+                <div class="feature-card">
+                    <div class="feature-icon payment">
+                        <i class="fas fa-credit-card"></i>
                     </div>
-                    <h4 class="text-2xl font-bold mb-4 text-gray-800">Payment Integration</h4>
-                    <p class="text-gray-600 leading-relaxed">Built-in Pinelabs payment gateway for seamless e-commerce functionality with secure transactions</p>
+                    <h3 class="feature-title">Payment Ready</h3>
+                    <p class="feature-description">Built-in payment processing with secure checkout and order management</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon responsive">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Mobile First</h3>
+                    <p class="feature-description">Responsive design that looks perfect on all devices and screen sizes</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon seo">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="feature-title">SEO Optimized</h3>
+                    <p class="feature-description">Built-in SEO best practices to help your website rank higher</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon analytics">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="feature-title">Analytics</h3>
+                    <p class="feature-description">Track visitors, sales, and performance with integrated analytics</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-6xl mx-auto px-4 text-center">
-            <div class="flex items-center justify-center mb-6">
-                <i class="fas fa-rocket text-purple-400 text-2xl mr-3"></i>
-                <h3 class="text-2xl font-bold">Deployly</h3>
+    <!-- Loading Modal -->
+    <div id="loadingModal" class="modal-overlay">
+        <div class="modal-content loading-modal">
+            <div class="loading-animation">
+                <div class="loading-orb"></div>
+                <div class="loading-particles">
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                    <div class="particle"></div>
+                </div>
             </div>
-            <p class="text-gray-400 mb-6">AI-powered website generation and deployment platform</p>
-            <div class="flex justify-center space-x-6">
-                <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors">
-                    <i class="fab fa-twitter text-xl"></i>
+            <h3 class="loading-title">Crafting Your Website</h3>
+            <p class="loading-text">Our AI is analyzing your requirements and generating custom code...</p>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-text">
+                    <span id="progressPercent">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="resultsModal" class="modal-overlay">
+        <div class="modal-content results-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">🎉 Your Website is Ready!</h3>
+                <button class="modal-close" onclick="closeResults()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="results-content">
+                <div class="preview-section">
+                    <h4 class="section-title">Preview</h4>
+                    <div class="preview-container">
+                        <div class="browser-mockup">
+                            <div class="browser-header">
+                                <div class="browser-controls">
+                                    <span class="control red"></span>
+                                    <span class="control yellow"></span>
+                                    <span class="control green"></span>
+                                </div>
+                                <div class="browser-url">localhost:3000</div>
+                            </div>
+                            <iframe id="previewFrame" class="preview-frame"></iframe>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="actions-section">
+                    <h4 class="section-title">Next Steps</h4>
+                    <div class="action-buttons">
+                        <button id="deployBtn" class="action-button primary">
+                            <i class="fas fa-rocket"></i>
+                            <span>Deploy Now</span>
+                        </button>
+                        <button class="action-button secondary" onclick="downloadFiles()">
+                            <i class="fas fa-download"></i>
+                            <span>Download Files</span>
+                        </button>
+                    </div>
+                    
+                    <div id="deploymentResult" class="deployment-result hidden">
+                        <div class="result-icon">🚀</div>
+                        <h5>Deployment Successful!</h5>
+                        <a id="deploymentLink" href="#" target="_blank" class="deployment-link"></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="files-section">
+                <h4 class="section-title">Generated Files</h4>
+                <div id="filesList" class="files-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <span class="brand-text">Deployly</span>
+            </div>
+            <p class="footer-text">AI-powered website generation platform</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">
+                    <i class="fab fa-twitter"></i>
                 </a>
-                <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors">
-                    <i class="fab fa-github text-xl"></i>
+                <a href="#" class="footer-link">
+                    <i class="fab fa-github"></i>
                 </a>
-                <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors">
-                    <i class="fab fa-discord text-xl"></i>
+                <a href="#" class="footer-link">
+                    <i class="fab fa-discord"></i>
                 </a>
             </div>
         </div>

@@ -2,14 +2,13 @@ class DeploylyApp {
     constructor() {
         this.apiBaseUrl = 'http://localhost:8000/api';
         this.generatedFiles = {};
-        this.animations = {};
         this.init();
     }
 
     init() {
         this.bindEvents();
         this.initAnimations();
-        this.setupIntersectionObserver();
+        this.setupCharacterCounter();
     }
 
     bindEvents() {
@@ -19,39 +18,85 @@ class DeploylyApp {
         form.addEventListener('submit', (e) => this.handleGenerate(e));
         deployBtn.addEventListener('click', () => this.handleDeploy());
 
-        // Add input animations
-        const inputs = document.querySelectorAll('.modern-input');
+        // Add input animations and interactions
+        this.setupInputInteractions();
+    }
+
+    setupInputInteractions() {
+        const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select');
+        
         inputs.forEach(input => {
             input.addEventListener('focus', (e) => this.animateInputFocus(e.target));
             input.addEventListener('blur', (e) => this.animateInputBlur(e.target));
+            
+            // Add floating label effect
+            input.addEventListener('input', (e) => this.handleInputChange(e.target));
+        });
+
+        // Add hover effects to buttons
+        const buttons = document.querySelectorAll('.nav-btn, .generate-button, .action-button');
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', (e) => this.animateButtonHover(e.target, true));
+            button.addEventListener('mouseleave', (e) => this.animateButtonHover(e.target, false));
+        });
+    }
+
+    setupCharacterCounter() {
+        const textarea = document.getElementById('businessDescription');
+        const counter = document.getElementById('charCount');
+        
+        textarea.addEventListener('input', () => {
+            const count = textarea.value.length;
+            counter.textContent = count;
+            
+            // Change color based on character count
+            if (count > 800) {
+                counter.style.color = '#ef4444';
+            } else if (count > 600) {
+                counter.style.color = '#f59e0b';
+            } else {
+                counter.style.color = '#71717a';
+            }
         });
     }
 
     initAnimations() {
-        // Animate navigation on load
+        // Animate elements on page load
+        this.animatePageLoad();
+        
+        // Setup scroll animations
+        this.setupScrollAnimations();
+        
+        // Animate floating orbs
+        this.animateFloatingOrbs();
+    }
+
+    animatePageLoad() {
+        // Animate navigation
         anime({
-            targets: '.nav-brand',
-            translateX: [-50, 0],
+            targets: '.nav-content',
+            translateY: [-50, 0],
             opacity: [0, 1],
             duration: 800,
             easing: 'easeOutExpo'
         });
 
+        // Animate hero content
         anime({
-            targets: '.nav-btn',
-            translateX: [50, 0],
+            targets: '.hero-badge',
+            scale: [0.8, 1],
             opacity: [0, 1],
-            duration: 800,
-            delay: anime.stagger(100),
-            easing: 'easeOutExpo'
+            duration: 600,
+            delay: 200,
+            easing: 'easeOutBack'
         });
 
-        // Animate hero elements
         anime({
             targets: '.hero-title',
             translateY: [50, 0],
             opacity: [0, 1],
-            duration: 1000,
+            duration: 800,
+            delay: 400,
             easing: 'easeOutExpo'
         });
 
@@ -59,57 +104,22 @@ class DeploylyApp {
             targets: '.hero-subtitle',
             translateY: [30, 0],
             opacity: [0, 1],
-            duration: 800,
-            delay: 200,
+            duration: 600,
+            delay: 600,
             easing: 'easeOutExpo'
         });
 
         anime({
-            targets: '.feature-badge',
+            targets: '.stat-item',
             scale: [0.8, 1],
             opacity: [0, 1],
-            duration: 600,
-            delay: anime.stagger(100, {start: 400}),
+            duration: 500,
+            delay: anime.stagger(100, {start: 800}),
             easing: 'easeOutBack'
         });
-
-        // Animate floating shapes
-        this.animateFloatingShapes();
     }
 
-    animateFloatingShapes() {
-        const shapes = document.querySelectorAll('.shape');
-        
-        shapes.forEach((shape, index) => {
-            anime({
-                targets: shape,
-                translateY: [
-                    {value: -20, duration: 2000},
-                    {value: 20, duration: 2000},
-                    {value: 0, duration: 2000}
-                ],
-                translateX: [
-                    {value: 10, duration: 3000},
-                    {value: -10, duration: 3000},
-                    {value: 0, duration: 2000}
-                ],
-                rotate: [
-                    {value: 180, duration: 4000},
-                    {value: 360, duration: 4000}
-                ],
-                scale: [
-                    {value: 1.1, duration: 2000},
-                    {value: 0.9, duration: 2000},
-                    {value: 1, duration: 2000}
-                ],
-                loop: true,
-                delay: index * 1000,
-                easing: 'easeInOutSine'
-            });
-        });
-    }
-
-    setupIntersectionObserver() {
+    setupScrollAnimations() {
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -124,7 +134,7 @@ class DeploylyApp {
         }, observerOptions);
 
         // Observe elements
-        document.querySelectorAll('.generator-card, .feature-card').forEach(el => {
+        document.querySelectorAll('.generator-card, .feature-card, .section-header').forEach(el => {
             observer.observe(el);
         });
     }
@@ -139,9 +149,9 @@ class DeploylyApp {
                 easing: 'easeOutExpo'
             });
 
-            // Animate form groups
+            // Animate form elements
             anime({
-                targets: element.querySelectorAll('.form-group'),
+                targets: element.querySelectorAll('.input-group'),
                 translateY: [30, 0],
                 opacity: [0, 1],
                 duration: 600,
@@ -156,10 +166,57 @@ class DeploylyApp {
                 translateY: [50, 0],
                 scale: [0.9, 1],
                 opacity: [0, 1],
-                duration: 800,
+                duration: 600,
                 easing: 'easeOutBack'
             });
         }
+
+        if (element.classList.contains('section-header')) {
+            anime({
+                targets: element.querySelector('.section-title'),
+                translateY: [30, 0],
+                opacity: [0, 1],
+                duration: 600,
+                easing: 'easeOutExpo'
+            });
+
+            anime({
+                targets: element.querySelector('.section-subtitle'),
+                translateY: [20, 0],
+                opacity: [0, 1],
+                duration: 500,
+                delay: 200,
+                easing: 'easeOutExpo'
+            });
+        }
+    }
+
+    animateFloatingOrbs() {
+        const orbs = document.querySelectorAll('.gradient-orb');
+        
+        orbs.forEach((orb, index) => {
+            anime({
+                targets: orb,
+                translateY: [
+                    {value: -30, duration: 3000},
+                    {value: 30, duration: 3000},
+                    {value: 0, duration: 3000}
+                ],
+                translateX: [
+                    {value: 20, duration: 4000},
+                    {value: -20, duration: 4000},
+                    {value: 0, duration: 2000}
+                ],
+                scale: [
+                    {value: 1.1, duration: 2000},
+                    {value: 0.9, duration: 2000},
+                    {value: 1, duration: 2000}
+                ],
+                loop: true,
+                delay: index * 1000,
+                easing: 'easeInOutSine'
+            });
+        });
     }
 
     animateInputFocus(input) {
@@ -169,9 +226,6 @@ class DeploylyApp {
             duration: 200,
             easing: 'easeOutQuad'
         });
-
-        // Add glow effect
-        input.style.boxShadow = '0 0 0 4px rgba(139, 92, 246, 0.1), 0 10px 25px -5px rgba(139, 92, 246, 0.3)';
     }
 
     animateInputBlur(input) {
@@ -181,9 +235,33 @@ class DeploylyApp {
             duration: 200,
             easing: 'easeOutQuad'
         });
+    }
 
-        // Remove glow effect
-        input.style.boxShadow = '';
+    animateButtonHover(button, isHover) {
+        if (isHover) {
+            anime({
+                targets: button,
+                scale: [1, 1.05],
+                duration: 200,
+                easing: 'easeOutQuad'
+            });
+        } else {
+            anime({
+                targets: button,
+                scale: [1.05, 1],
+                duration: 200,
+                easing: 'easeOutQuad'
+            });
+        }
+    }
+
+    handleInputChange(input) {
+        // Add visual feedback for filled inputs
+        if (input.value.trim()) {
+            input.classList.add('filled');
+        } else {
+            input.classList.remove('filled');
+        }
     }
 
     async handleGenerate(e) {
@@ -191,13 +269,19 @@ class DeploylyApp {
         
         const description = document.getElementById('businessDescription').value;
         const projectName = document.getElementById('projectName').value;
+        const theme = document.getElementById('theme').value;
         
         if (!description.trim()) {
-            this.showError('Please provide a business description');
+            this.showNotification('Please provide a business description', 'error');
             return;
         }
 
-        this.showLoading(true);
+        if (!projectName.trim()) {
+            this.showNotification('Please provide a project name', 'error');
+            return;
+        }
+
+        this.showLoadingModal(true);
         this.animateGenerateButton(true);
 
         try {
@@ -207,7 +291,9 @@ class DeploylyApp {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    businessDescription: description
+                    businessDescription: description,
+                    projectName: projectName,
+                    theme: theme
                 })
             });
 
@@ -226,9 +312,9 @@ class DeploylyApp {
 
         } catch (error) {
             console.error('Generation error:', error);
-            this.showError('Failed to generate website. Please try again.');
+            this.showNotification('Failed to generate website. Please try again.', 'error');
         } finally {
-            this.showLoading(false);
+            this.showLoadingModal(false);
             this.animateGenerateButton(false);
         }
     }
@@ -237,81 +323,94 @@ class DeploylyApp {
         const projectName = document.getElementById('projectName').value;
         
         if (!this.generatedFiles || Object.keys(this.generatedFiles).length === 0) {
-            this.showError('No files to deploy. Please generate a website first.');
+            this.showNotification('No files to deploy. Please generate a website first.', 'error');
             return;
         }
 
         this.animateDeployButton(true);
 
         try {
-            // Simulate deployment for now
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            // Simulate deployment process
+            await this.simulateDeployment();
             
             const mockUrl = `https://${projectName}-${Math.random().toString(36).substr(2, 8)}.vercel.app`;
             this.showDeploymentSuccess(mockUrl);
 
         } catch (error) {
             console.error('Deployment error:', error);
-            this.showError('Failed to deploy website. Please try again.');
+            this.showNotification('Failed to deploy website. Please try again.', 'error');
         } finally {
             this.animateDeployButton(false);
         }
     }
 
+    async simulateDeployment() {
+        const steps = [
+            'Preparing files...',
+            'Building project...',
+            'Optimizing assets...',
+            'Deploying to CDN...',
+            'Configuring domain...',
+            'Finalizing deployment...'
+        ];
+
+        for (let i = 0; i < steps.length; i++) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+            // You could update a progress indicator here
+        }
+    }
+
     animateGenerateButton(loading) {
         const btn = document.getElementById('generateBtn');
-        const btnText = btn.querySelector('.btn-text');
-        const btnLoading = btn.querySelector('.btn-loading');
+        const content = btn.querySelector('.button-content');
+        const loadingEl = btn.querySelector('.button-loading');
 
         if (loading) {
             anime({
-                targets: btnText,
+                targets: content,
                 opacity: [1, 0],
                 duration: 200,
                 complete: () => {
-                    btnText.classList.add('hidden');
-                    btnLoading.classList.remove('hidden');
+                    content.classList.add('hidden');
+                    loadingEl.classList.remove('hidden');
                     anime({
-                        targets: btnLoading,
+                        targets: loadingEl,
                         opacity: [0, 1],
                         duration: 200
                     });
                 }
             });
 
-            // Animate button background
-            anime({
-                targets: btn,
-                background: ['linear-gradient(135deg, #8b5cf6, #3b82f6)', 'linear-gradient(135deg, #6366f1, #8b5cf6)'],
-                duration: 1000,
-                loop: true,
-                direction: 'alternate',
-                easing: 'easeInOutSine'
-            });
+            btn.disabled = true;
         } else {
             anime({
-                targets: btnLoading,
+                targets: loadingEl,
                 opacity: [1, 0],
                 duration: 200,
                 complete: () => {
-                    btnLoading.classList.add('hidden');
-                    btnText.classList.remove('hidden');
+                    loadingEl.classList.add('hidden');
+                    content.classList.remove('hidden');
                     anime({
-                        targets: btnText,
+                        targets: content,
                         opacity: [0, 1],
                         duration: 200
                     });
                 }
             });
+
+            btn.disabled = false;
         }
     }
 
     animateDeployButton(loading) {
         const btn = document.getElementById('deployBtn');
-        const originalText = btn.innerHTML;
+        const originalHTML = btn.innerHTML;
 
         if (loading) {
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-3"></i>Deploying...';
+            btn.innerHTML = `
+                <div class="loading-spinner"></div>
+                <span>Deploying...</span>
+            `;
             btn.disabled = true;
 
             anime({
@@ -322,85 +421,73 @@ class DeploylyApp {
                 easing: 'easeInOutSine'
             });
         } else {
-            btn.innerHTML = originalText;
+            btn.innerHTML = originalHTML;
             btn.disabled = false;
             anime.remove(btn);
         }
     }
 
-    showLoading(show) {
+    showLoadingModal(show) {
         const modal = document.getElementById('loadingModal');
         
         if (show) {
             modal.classList.add('show');
             
-            // Animate modal entrance
-            anime({
-                targets: '.loading-card',
-                scale: [0.8, 1],
-                opacity: [0, 1],
-                duration: 500,
-                easing: 'easeOutBack'
-            });
-
-            // Animate progress bar
-            anime({
-                targets: '.progress-fill',
-                width: ['0%', '100%'],
-                duration: 3000,
-                easing: 'easeInOutQuad'
-            });
+            // Animate progress
+            this.animateProgress();
+            
+            // Animate loading particles
+            this.animateLoadingParticles();
         } else {
-            anime({
-                targets: '.loading-card',
-                scale: [1, 0.8],
-                opacity: [1, 0],
-                duration: 300,
-                easing: 'easeInBack',
-                complete: () => {
-                    modal.classList.remove('show');
-                }
-            });
+            modal.classList.remove('show');
         }
     }
 
+    animateProgress() {
+        const progressFill = document.querySelector('.progress-fill');
+        const progressPercent = document.getElementById('progressPercent');
+        
+        anime({
+            targets: progressFill,
+            width: ['0%', '100%'],
+            duration: 3000,
+            easing: 'easeInOutQuad',
+            update: function(anim) {
+                const percent = Math.round(anim.progress);
+                progressPercent.textContent = `${percent}%`;
+            }
+        });
+    }
+
+    animateLoadingParticles() {
+        const particles = document.querySelectorAll('.particle');
+        
+        particles.forEach((particle, index) => {
+            anime({
+                targets: particle,
+                scale: [0, 1, 0],
+                opacity: [0, 1, 0],
+                duration: 2000,
+                delay: index * 400,
+                loop: true,
+                easing: 'easeInOutSine'
+            });
+        });
+    }
+
     async showResults(files, projectName) {
-        const resultsSection = document.getElementById('resultsSection');
+        this.showLoadingModal(false);
+        
+        const modal = document.getElementById('resultsModal');
         const filesList = document.getElementById('filesList');
         
         // Clear previous results
         filesList.innerHTML = '';
         
-        // Populate files list with animation
+        // Populate files list
         Object.keys(files).forEach((filename, index) => {
-            const fileItem = document.createElement('div');
-            fileItem.className = 'file-item flex items-center justify-between p-4 bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 transition-all duration-300';
-            fileItem.innerHTML = `
-                <div class="flex items-center">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mr-4">
-                        <i class="fas fa-file-code text-white text-sm"></i>
-                    </div>
-                    <div>
-                        <span class="font-semibold text-gray-800">${filename}</span>
-                        <p class="text-sm text-gray-500">${this.getFileSize(files[filename])} characters</p>
-                    </div>
-                </div>
-                <button class="view-btn bg-purple-100 hover:bg-purple-200 text-purple-700 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105" onclick="app.viewFile('${filename}')">
-                    <i class="fas fa-eye mr-2"></i>View
-                </button>
-            `;
-            
-            // Add with animation delay
-            setTimeout(() => {
-                filesList.appendChild(fileItem);
-                anime({
-                    targets: fileItem,
-                    translateX: [50, 0],
-                    opacity: [0, 1],
-                    duration: 500,
-                    easing: 'easeOutExpo'
-                });
-            }, index * 100);
+            const fileItem = this.createFileItem(filename, files[filename], index);
+            filesList.appendChild(fileItem);
         });
 
         // Show preview if index.html exists
@@ -408,23 +495,41 @@ class DeploylyApp {
             this.showPreview(files['index.html']);
         }
 
-        // Animate results section
-        resultsSection.classList.add('show');
+        // Show modal with animation
+        modal.classList.add('show');
         
+        // Animate file items
         anime({
-            targets: '.preview-card, .action-card, .files-card',
-            translateY: [50, 0],
+            targets: '.file-item',
+            translateX: [50, 0],
             opacity: [0, 1],
-            duration: 800,
-            delay: anime.stagger(200),
+            duration: 500,
+            delay: anime.stagger(100),
             easing: 'easeOutExpo'
         });
+    }
 
-        // Smooth scroll to results
-        resultsSection.scrollIntoView({ 
-            behavior: 'smooth',
-            block: 'start'
-        });
+    createFileItem(filename, content, index) {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        fileItem.style.opacity = '0';
+        
+        fileItem.innerHTML = `
+            <div class="file-info">
+                <div class="file-icon">
+                    <i class="fas fa-file-code"></i>
+                </div>
+                <div>
+                    <div class="file-name">${filename}</div>
+                    <div class="file-size">${this.formatFileSize(content.length)} characters</div>
+                </div>
+            </div>
+            <button class="view-button" onclick="app.viewFile('${filename}')">
+                <i class="fas fa-eye"></i>
+            </button>
+        `;
+        
+        return fileItem;
     }
 
     showPreview(htmlContent) {
@@ -443,49 +548,51 @@ class DeploylyApp {
     }
 
     showDeploymentSuccess(deploymentUrl) {
-        const deploymentUrlDiv = document.getElementById('deploymentUrl');
+        const deploymentResult = document.getElementById('deploymentResult');
         const deploymentLink = document.getElementById('deploymentLink');
         
         deploymentLink.href = deploymentUrl;
         deploymentLink.textContent = deploymentUrl;
-        deploymentUrlDiv.classList.remove('hidden');
+        deploymentResult.classList.remove('hidden');
         
         // Animate deployment success
         anime({
-            targets: deploymentUrlDiv,
+            targets: deploymentResult,
             translateY: [-20, 0],
             opacity: [0, 1],
             duration: 500,
             easing: 'easeOutBack'
         });
         
-        this.showSuccess('Website deployed successfully!');
-        
-        // Confetti effect
+        this.showNotification('Website deployed successfully! 🚀', 'success');
         this.createConfetti();
     }
 
     createConfetti() {
-        const colors = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+        const colors = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6'];
         const confettiContainer = document.createElement('div');
-        confettiContainer.style.position = 'fixed';
-        confettiContainer.style.top = '0';
-        confettiContainer.style.left = '0';
-        confettiContainer.style.width = '100%';
-        confettiContainer.style.height = '100%';
-        confettiContainer.style.pointerEvents = 'none';
-        confettiContainer.style.zIndex = '9999';
+        confettiContainer.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        `;
         document.body.appendChild(confettiContainer);
 
         for (let i = 0; i < 50; i++) {
             const confetti = document.createElement('div');
-            confetti.style.position = 'absolute';
-            confetti.style.width = '10px';
-            confetti.style.height = '10px';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.top = '-10px';
-            confetti.style.borderRadius = '50%';
+            confetti.style.cssText = `
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                left: ${Math.random() * 100}%;
+                top: -10px;
+                border-radius: 50%;
+            `;
             confettiContainer.appendChild(confetti);
 
             anime({
@@ -495,16 +602,11 @@ class DeploylyApp {
                 rotate: Math.random() * 360,
                 duration: Math.random() * 2000 + 1000,
                 easing: 'easeInQuad',
-                complete: () => {
-                    confetti.remove();
-                }
+                complete: () => confetti.remove()
             });
         }
 
-        // Remove container after animation
-        setTimeout(() => {
-            confettiContainer.remove();
-        }, 3000);
+        setTimeout(() => confettiContainer.remove(), 3000);
     }
 
     viewFile(filename) {
@@ -522,12 +624,12 @@ class DeploylyApp {
                             body { 
                                 font-family: 'Inter', sans-serif; 
                                 padding: 20px; 
-                                background: #1a1a1a; 
+                                background: #0a0a0f; 
                                 color: #fff;
                                 margin: 0;
                             }
                             .header {
-                                background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+                                background: linear-gradient(135deg, #667eea, #764ba2);
                                 padding: 20px;
                                 border-radius: 12px;
                                 margin-bottom: 20px;
@@ -537,11 +639,11 @@ class DeploylyApp {
                                 font-size: 24px;
                             }
                             pre { 
-                                background: #2d2d2d !important; 
+                                background: #1a1a2e !important; 
                                 padding: 20px; 
                                 border-radius: 12px; 
                                 overflow: auto;
-                                border: 1px solid #404040;
+                                border: 1px solid rgba(255, 255, 255, 0.1);
                             }
                             code {
                                 font-family: 'Fira Code', 'Consolas', monospace;
@@ -572,56 +674,50 @@ class DeploylyApp {
         return langMap[ext] || 'markup';
     }
 
-    getFileSize(content) {
-        return content.length.toLocaleString();
-    }
-
-    showError(message) {
-        this.showNotification(message, 'error');
-    }
-
-    showSuccess(message) {
-        this.showNotification(message, 'success');
+    formatFileSize(bytes) {
+        return bytes.toLocaleString();
     }
 
     showNotification(message, type) {
         const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-2xl shadow-2xl backdrop-blur-sm border max-w-sm ${
-            type === 'error' 
-                ? 'bg-red-500/90 border-red-400 text-white' 
-                : 'bg-green-500/90 border-green-400 text-white'
-        }`;
+        notification.className = `notification ${type}`;
+        notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 500;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+            border: 1px solid;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            ${type === 'error' 
+                ? 'background: rgba(239, 68, 68, 0.9); color: white; border-color: #ef4444;' 
+                : 'background: rgba(16, 185, 129, 0.9); color: white; border-color: #10b981;'
+            }
+        `;
         
         notification.innerHTML = `
-            <div class="flex items-center">
-                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'} mr-3"></i>
-                <span class="font-medium">${message}</span>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i>
+                <span>${message}</span>
             </div>
         `;
         
         document.body.appendChild(notification);
         
         // Animate in
-        anime({
-            targets: notification,
-            translateX: [300, 0],
-            opacity: [0, 1],
-            duration: 500,
-            easing: 'easeOutBack'
-        });
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
         
         // Auto remove
         setTimeout(() => {
-            anime({
-                targets: notification,
-                translateX: [0, 300],
-                opacity: [1, 0],
-                duration: 300,
-                easing: 'easeInBack',
-                complete: () => {
-                    notification.remove();
-                }
-            });
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => notification.remove(), 300);
         }, 4000);
     }
 
@@ -632,33 +728,56 @@ class DeploylyApp {
     }
 }
 
+// Global functions for modal interactions
+function closeResults() {
+    document.getElementById('resultsModal').classList.remove('show');
+}
+
+function downloadFiles() {
+    if (window.app && window.app.generatedFiles) {
+        // Create a simple download simulation
+        const files = window.app.generatedFiles;
+        const blob = new Blob([JSON.stringify(files, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'generated-website-files.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        window.app.showNotification('Files downloaded successfully!', 'success');
+    }
+}
+
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new DeploylyApp();
 });
 
-// Add some additional interactive effects
+// Add mouse parallax effect
 document.addEventListener('mousemove', (e) => {
-    const shapes = document.querySelectorAll('.shape');
+    const orbs = document.querySelectorAll('.gradient-orb');
     const mouseX = e.clientX / window.innerWidth;
     const mouseY = e.clientY / window.innerHeight;
     
-    shapes.forEach((shape, index) => {
-        const speed = (index + 1) * 0.5;
-        const x = (mouseX - 0.5) * speed;
-        const y = (mouseY - 0.5) * speed;
+    orbs.forEach((orb, index) => {
+        const speed = (index + 1) * 0.3;
+        const x = (mouseX - 0.5) * speed * 50;
+        const y = (mouseY - 0.5) * speed * 50;
         
-        shape.style.transform = `translate(${x}px, ${y}px)`;
+        orb.style.transform = `translate(${x}px, ${y}px)`;
     });
 });
 
-// Add scroll-based animations
+// Add scroll-based animations for grid pattern
 window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
-    const parallax = document.querySelector('.hero-bg');
-    const speed = scrolled * 0.5;
+    const gridPattern = document.querySelector('.grid-pattern');
     
-    if (parallax) {
-        parallax.style.transform = `translateY(${speed}px)`;
+    if (gridPattern) {
+        const speed = scrolled * 0.1;
+        gridPattern.style.transform = `translate(${speed}px, ${speed}px)`;
     }
 });
