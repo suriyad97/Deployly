@@ -9,6 +9,8 @@ class DeploylyApp {
         this.bindEvents();
         this.initAnimations();
         this.setupCharacterCounter();
+        this.setupCounterAnimations();
+        this.setupParallaxEffects();
     }
 
     bindEvents() {
@@ -18,8 +20,14 @@ class DeploylyApp {
         form.addEventListener('submit', (e) => this.handleGenerate(e));
         deployBtn.addEventListener('click', () => this.handleDeploy());
 
-        // Add input animations and interactions
+        // Enhanced input interactions
         this.setupInputInteractions();
+        
+        // Setup scroll effects
+        this.setupScrollEffects();
+        
+        // Setup mouse effects
+        this.setupMouseEffects();
     }
 
     setupInputInteractions() {
@@ -28,16 +36,22 @@ class DeploylyApp {
         inputs.forEach(input => {
             input.addEventListener('focus', (e) => this.animateInputFocus(e.target));
             input.addEventListener('blur', (e) => this.animateInputBlur(e.target));
-            
-            // Add floating label effect
             input.addEventListener('input', (e) => this.handleInputChange(e.target));
         });
 
-        // Add hover effects to buttons
-        const buttons = document.querySelectorAll('.nav-btn, .generate-button, .action-button');
+        // Enhanced button interactions
+        const buttons = document.querySelectorAll('.nav-btn, .generate-button, .action-button, .footer-link');
         buttons.forEach(button => {
             button.addEventListener('mouseenter', (e) => this.animateButtonHover(e.target, true));
             button.addEventListener('mouseleave', (e) => this.animateButtonHover(e.target, false));
+            button.addEventListener('click', (e) => this.createRippleEffect(e));
+        });
+
+        // Feature card interactions
+        const featureCards = document.querySelectorAll('.feature-card');
+        featureCards.forEach(card => {
+            card.addEventListener('mouseenter', (e) => this.animateFeatureCardHover(e.target, true));
+            card.addEventListener('mouseleave', (e) => this.animateFeatureCardHover(e.target, false));
         });
     }
 
@@ -49,80 +63,212 @@ class DeploylyApp {
             const count = textarea.value.length;
             counter.textContent = count;
             
-            // Change color based on character count
-            if (count > 800) {
-                counter.style.color = '#ef4444';
-            } else if (count > 600) {
-                counter.style.color = '#f59e0b';
-            } else {
-                counter.style.color = '#71717a';
+            // Animate counter color changes
+            anime({
+                targets: counter,
+                color: count > 800 ? '#ef4444' : count > 600 ? '#f59e0b' : '#71717a',
+                scale: [1.2, 1],
+                duration: 200,
+                easing: 'easeOutQuad'
+            });
+        });
+    }
+
+    setupCounterAnimations() {
+        const statNumbers = document.querySelectorAll('.stat-number');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    this.animateCounter(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach(number => observer.observe(number));
+    }
+
+    animateCounter(element) {
+        const target = parseInt(element.dataset.target);
+        const isDecimal = element.dataset.target.includes('.');
+        
+        anime({
+            targets: { value: 0 },
+            value: target,
+            duration: 2000,
+            easing: 'easeOutExpo',
+            update: function(anim) {
+                const value = isDecimal ? anim.animatables[0].target.value.toFixed(1) : Math.round(anim.animatables[0].target.value);
+                element.textContent = value;
             }
         });
     }
 
+    setupParallaxEffects() {
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            // Parallax for floating shapes
+            const shapes = document.querySelectorAll('.shape, .neural-node');
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 0.2;
+                const x = (mouseX - 0.5) * speed * 30;
+                const y = (mouseY - 0.5) * speed * 30;
+                
+                anime({
+                    targets: shape,
+                    translateX: x,
+                    translateY: y,
+                    duration: 1000,
+                    easing: 'easeOutQuad'
+                });
+            });
+
+            // Parallax for orbs
+            const orbs = document.querySelectorAll('.gradient-orb');
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 0.1;
+                const x = (mouseX - 0.5) * speed * 50;
+                const y = (mouseY - 0.5) * speed * 50;
+                
+                anime({
+                    targets: orb,
+                    translateX: x,
+                    translateY: y,
+                    duration: 1500,
+                    easing: 'easeOutQuad'
+                });
+            });
+        });
+    }
+
+    setupScrollEffects() {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            
+            // Parallax background elements
+            const backgroundElements = document.querySelectorAll('.neural-network, .floating-shapes');
+            backgroundElements.forEach(element => {
+                anime({
+                    targets: element,
+                    translateY: rate,
+                    duration: 0,
+                    easing: 'linear'
+                });
+            });
+
+            // Update navigation background
+            const nav = document.querySelector('.nav-container');
+            if (scrolled > 100) {
+                nav.style.background = 'rgba(10, 10, 15, 0.95)';
+                nav.style.backdropFilter = 'blur(30px)';
+            } else {
+                nav.style.background = 'rgba(10, 10, 15, 0.8)';
+                nav.style.backdropFilter = 'blur(20px)';
+            }
+        });
+    }
+
+    setupMouseEffects() {
+        // Magnetic effect for buttons
+        const magneticElements = document.querySelectorAll('.generate-button, .action-button');
+        
+        magneticElements.forEach(element => {
+            element.addEventListener('mousemove', (e) => {
+                const rect = element.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                anime({
+                    targets: element,
+                    translateX: x * 0.1,
+                    translateY: y * 0.1,
+                    duration: 200,
+                    easing: 'easeOutQuad'
+                });
+            });
+
+            element.addEventListener('mouseleave', () => {
+                anime({
+                    targets: element,
+                    translateX: 0,
+                    translateY: 0,
+                    duration: 300,
+                    easing: 'easeOutElastic(1, .6)'
+                });
+            });
+        });
+    }
+
     initAnimations() {
-        // Animate elements on page load
         this.animatePageLoad();
-        
-        // Setup scroll animations
         this.setupScrollAnimations();
-        
-        // Animate floating orbs
-        this.animateFloatingOrbs();
+        this.animateFloatingElements();
+        this.setupTextAnimations();
     }
 
     animatePageLoad() {
-        // Animate navigation
-        anime({
-            targets: '.nav-content',
-            translateY: [-50, 0],
-            opacity: [0, 1],
-            duration: 800,
-            easing: 'easeOutExpo'
-        });
+        // Enhanced navigation animation
+        anime.timeline()
+            .add({
+                targets: '.nav-content',
+                translateY: [-100, 0],
+                opacity: [0, 1],
+                duration: 1000,
+                easing: 'easeOutExpo'
+            })
+            .add({
+                targets: '.nav-btn',
+                scale: [0.8, 1],
+                opacity: [0, 1],
+                duration: 600,
+                delay: anime.stagger(100),
+                easing: 'easeOutBack'
+            }, '-=500');
 
-        // Animate hero content
-        anime({
-            targets: '.hero-badge',
-            scale: [0.8, 1],
-            opacity: [0, 1],
-            duration: 600,
-            delay: 200,
-            easing: 'easeOutBack'
-        });
-
-        anime({
-            targets: '.hero-title',
-            translateY: [50, 0],
-            opacity: [0, 1],
-            duration: 800,
-            delay: 400,
-            easing: 'easeOutExpo'
-        });
-
-        anime({
-            targets: '.hero-subtitle',
-            translateY: [30, 0],
-            opacity: [0, 1],
-            duration: 600,
-            delay: 600,
-            easing: 'easeOutExpo'
-        });
-
-        anime({
-            targets: '.stat-item',
-            scale: [0.8, 1],
-            opacity: [0, 1],
-            duration: 500,
-            delay: anime.stagger(100, {start: 800}),
-            easing: 'easeOutBack'
-        });
+        // Enhanced hero animations
+        const heroTimeline = anime.timeline();
+        
+        heroTimeline
+            .add({
+                targets: '.hero-badge',
+                scale: [0, 1],
+                opacity: [0, 1],
+                duration: 800,
+                easing: 'easeOutBack'
+            })
+            .add({
+                targets: '.word',
+                translateY: [100, 0],
+                opacity: [0, 1],
+                duration: 800,
+                delay: anime.stagger(100),
+                easing: 'easeOutExpo'
+            }, '-=400')
+            .add({
+                targets: '.subtitle-word',
+                translateY: [50, 0],
+                opacity: [0, 1],
+                duration: 600,
+                delay: anime.stagger(50),
+                easing: 'easeOutExpo'
+            }, '-=200')
+            .add({
+                targets: '.stat-item',
+                scale: [0.8, 1],
+                opacity: [0, 1],
+                duration: 600,
+                delay: anime.stagger(150),
+                easing: 'easeOutBack'
+            }, '-=300');
     }
 
     setupScrollAnimations() {
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            rootMargin: '0px 0px -100px 0px'
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -133,7 +279,7 @@ class DeploylyApp {
             });
         }, observerOptions);
 
-        // Observe elements
+        // Observe elements with enhanced animations
         document.querySelectorAll('.generator-card, .feature-card, .section-header').forEach(el => {
             observer.observe(el);
         });
@@ -141,80 +287,154 @@ class DeploylyApp {
 
     animateOnScroll(element) {
         if (element.classList.contains('generator-card')) {
-            anime({
-                targets: element,
-                translateY: [50, 0],
-                opacity: [0, 1],
-                duration: 800,
-                easing: 'easeOutExpo'
-            });
-
-            // Animate form elements
-            anime({
-                targets: element.querySelectorAll('.input-group'),
-                translateY: [30, 0],
-                opacity: [0, 1],
-                duration: 600,
-                delay: anime.stagger(100),
-                easing: 'easeOutExpo'
-            });
+            anime.timeline()
+                .add({
+                    targets: element,
+                    translateY: [100, 0],
+                    opacity: [0, 1],
+                    duration: 1000,
+                    easing: 'easeOutExpo'
+                })
+                .add({
+                    targets: element.querySelectorAll('.input-group'),
+                    translateY: [50, 0],
+                    opacity: [0, 1],
+                    duration: 600,
+                    delay: anime.stagger(150),
+                    easing: 'easeOutExpo'
+                }, '-=500')
+                .add({
+                    targets: element.querySelector('.generate-button'),
+                    scale: [0.8, 1],
+                    opacity: [0, 1],
+                    duration: 600,
+                    easing: 'easeOutBack'
+                }, '-=200');
         }
 
         if (element.classList.contains('feature-card')) {
             anime({
                 targets: element,
-                translateY: [50, 0],
+                translateY: [80, 0],
                 scale: [0.9, 1],
                 opacity: [0, 1],
-                duration: 600,
+                duration: 800,
                 easing: 'easeOutBack'
+            });
+
+            // Animate feature icon
+            anime({
+                targets: element.querySelector('.feature-icon'),
+                scale: [0, 1],
+                rotate: [180, 0],
+                duration: 1000,
+                delay: 200,
+                easing: 'easeOutElastic(1, .8)'
             });
         }
 
         if (element.classList.contains('section-header')) {
-            anime({
-                targets: element.querySelector('.section-title'),
-                translateY: [30, 0],
-                opacity: [0, 1],
-                duration: 600,
-                easing: 'easeOutExpo'
-            });
-
-            anime({
-                targets: element.querySelector('.section-subtitle'),
-                translateY: [20, 0],
-                opacity: [0, 1],
-                duration: 500,
-                delay: 200,
-                easing: 'easeOutExpo'
-            });
+            anime.timeline()
+                .add({
+                    targets: element.querySelector('.section-title'),
+                    translateY: [50, 0],
+                    opacity: [0, 1],
+                    duration: 800,
+                    easing: 'easeOutExpo'
+                })
+                .add({
+                    targets: element.querySelector('.section-subtitle'),
+                    translateY: [30, 0],
+                    opacity: [0, 1],
+                    duration: 600,
+                    easing: 'easeOutExpo'
+                }, '-=400');
         }
     }
 
-    animateFloatingOrbs() {
+    animateFloatingElements() {
+        // Enhanced floating animations for neural nodes
+        const neuralNodes = document.querySelectorAll('.neural-node');
+        neuralNodes.forEach((node, index) => {
+            anime({
+                targets: node,
+                translateY: [
+                    { value: -20, duration: 2000 },
+                    { value: 20, duration: 2000 },
+                    { value: 0, duration: 2000 }
+                ],
+                translateX: [
+                    { value: 15, duration: 3000 },
+                    { value: -15, duration: 3000 },
+                    { value: 0, duration: 2000 }
+                ],
+                scale: [
+                    { value: 1.2, duration: 1500 },
+                    { value: 0.8, duration: 1500 },
+                    { value: 1, duration: 1500 }
+                ],
+                loop: true,
+                delay: index * 500,
+                easing: 'easeInOutSine'
+            });
+        });
+
+        // Enhanced orb animations
         const orbs = document.querySelectorAll('.gradient-orb');
-        
         orbs.forEach((orb, index) => {
             anime({
                 targets: orb,
                 translateY: [
-                    {value: -30, duration: 3000},
-                    {value: 30, duration: 3000},
-                    {value: 0, duration: 3000}
+                    { value: -50, duration: 4000 },
+                    { value: 50, duration: 4000 },
+                    { value: 0, duration: 4000 }
                 ],
                 translateX: [
-                    {value: 20, duration: 4000},
-                    {value: -20, duration: 4000},
-                    {value: 0, duration: 2000}
+                    { value: 30, duration: 5000 },
+                    { value: -30, duration: 5000 },
+                    { value: 0, duration: 3000 }
                 ],
                 scale: [
-                    {value: 1.1, duration: 2000},
-                    {value: 0.9, duration: 2000},
-                    {value: 1, duration: 2000}
+                    { value: 1.1, duration: 3000 },
+                    { value: 0.9, duration: 3000 },
+                    { value: 1, duration: 3000 }
+                ],
+                rotate: [
+                    { value: 180, duration: 8000 },
+                    { value: 360, duration: 8000 }
                 ],
                 loop: true,
-                delay: index * 1000,
+                delay: index * 2000,
                 easing: 'easeInOutSine'
+            });
+        });
+    }
+
+    setupTextAnimations() {
+        // Animate letters in brand text
+        const brandLetters = document.querySelectorAll('.brand-text .letter');
+        brandLetters.forEach((letter, index) => {
+            letter.addEventListener('mouseenter', () => {
+                anime({
+                    targets: letter,
+                    scale: [1, 1.3, 1],
+                    rotate: [0, 360, 0],
+                    duration: 600,
+                    easing: 'easeOutElastic(1, .6)'
+                });
+            });
+        });
+
+        // Animate title words on hover
+        const titleWords = document.querySelectorAll('.hero-title .word');
+        titleWords.forEach(word => {
+            word.addEventListener('mouseenter', () => {
+                anime({
+                    targets: word,
+                    scale: [1, 1.1, 1],
+                    duration: 400,
+                    easing: 'easeOutElastic(1, .8)'
+                });
             });
         });
     }
@@ -223,7 +443,16 @@ class DeploylyApp {
         anime({
             targets: input,
             scale: [1, 1.02],
-            duration: 200,
+            duration: 300,
+            easing: 'easeOutQuad'
+        });
+
+        // Animate label
+        const label = input.closest('.input-group').querySelector('.input-label');
+        anime({
+            targets: label,
+            color: '#6366f1',
+            duration: 300,
             easing: 'easeOutQuad'
         });
     }
@@ -232,7 +461,16 @@ class DeploylyApp {
         anime({
             targets: input,
             scale: [1.02, 1],
-            duration: 200,
+            duration: 300,
+            easing: 'easeOutQuad'
+        });
+
+        // Reset label color
+        const label = input.closest('.input-group').querySelector('.input-label');
+        anime({
+            targets: label,
+            color: '#ffffff',
+            duration: 300,
             easing: 'easeOutQuad'
         });
     }
@@ -242,26 +480,94 @@ class DeploylyApp {
             anime({
                 targets: button,
                 scale: [1, 1.05],
-                duration: 200,
+                duration: 300,
                 easing: 'easeOutQuad'
             });
         } else {
             anime({
                 targets: button,
                 scale: [1.05, 1],
-                duration: 200,
+                duration: 300,
+                easing: 'easeOutQuad'
+            });
+        }
+    }
+
+    animateFeatureCardHover(card, isHover) {
+        if (isHover) {
+            anime({
+                targets: card,
+                translateY: [0, -15],
+                duration: 400,
+                easing: 'easeOutQuad'
+            });
+
+            // Animate icon
+            const icon = card.querySelector('.feature-icon');
+            anime({
+                targets: icon,
+                scale: [1, 1.1],
+                rotate: [0, 5],
+                duration: 400,
+                easing: 'easeOutQuad'
+            });
+        } else {
+            anime({
+                targets: card,
+                translateY: [-15, 0],
+                duration: 400,
+                easing: 'easeOutQuad'
+            });
+
+            const icon = card.querySelector('.feature-icon');
+            anime({
+                targets: icon,
+                scale: [1.1, 1],
+                rotate: [5, 0],
+                duration: 400,
+                easing: 'easeOutQuad'
+            });
+        }
+    }
+
+    createRippleEffect(e) {
+        const button = e.currentTarget;
+        const ripple = button.querySelector('.btn-ripple, .button-ripple, .link-ripple');
+        
+        if (ripple) {
+            const rect = button.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            
+            anime({
+                targets: ripple,
+                scale: [0, 1],
+                opacity: [1, 0],
+                duration: 600,
                 easing: 'easeOutQuad'
             });
         }
     }
 
     handleInputChange(input) {
-        // Add visual feedback for filled inputs
         if (input.value.trim()) {
             input.classList.add('filled');
         } else {
             input.classList.remove('filled');
         }
+
+        // Add typing animation effect
+        anime({
+            targets: input,
+            borderColor: ['#6366f1', '#4f46e5', '#6366f1'],
+            duration: 200,
+            easing: 'easeInOutQuad'
+        });
     }
 
     async handleGenerate(e) {
@@ -330,7 +636,6 @@ class DeploylyApp {
         this.animateDeployButton(true);
 
         try {
-            // Simulate deployment process
             await this.simulateDeployment();
             
             const mockUrl = `https://${projectName}-${Math.random().toString(36).substr(2, 8)}.vercel.app`;
@@ -355,8 +660,7 @@ class DeploylyApp {
         ];
 
         for (let i = 0; i < steps.length; i++) {
-            await new Promise(resolve => setTimeout(resolve, 500));
-            // You could update a progress indicator here
+            await new Promise(resolve => setTimeout(resolve, 800));
         }
     }
 
@@ -369,14 +673,18 @@ class DeploylyApp {
             anime({
                 targets: content,
                 opacity: [1, 0],
-                duration: 200,
+                scale: [1, 0.8],
+                duration: 300,
+                easing: 'easeOutQuad',
                 complete: () => {
                     content.classList.add('hidden');
                     loadingEl.classList.remove('hidden');
                     anime({
                         targets: loadingEl,
                         opacity: [0, 1],
-                        duration: 200
+                        scale: [0.8, 1],
+                        duration: 300,
+                        easing: 'easeOutQuad'
                     });
                 }
             });
@@ -386,14 +694,18 @@ class DeploylyApp {
             anime({
                 targets: loadingEl,
                 opacity: [1, 0],
-                duration: 200,
+                scale: [1, 0.8],
+                duration: 300,
+                easing: 'easeOutQuad',
                 complete: () => {
                     loadingEl.classList.add('hidden');
                     content.classList.remove('hidden');
                     anime({
                         targets: content,
                         opacity: [0, 1],
-                        duration: 200
+                        scale: [0.8, 1],
+                        duration: 300,
+                        easing: 'easeOutQuad'
                     });
                 }
             });
@@ -408,7 +720,10 @@ class DeploylyApp {
 
         if (loading) {
             btn.innerHTML = `
-                <div class="loading-spinner"></div>
+                <div class="loading-spinner">
+                    <div class="spinner-ring"></div>
+                    <div class="spinner-dot"></div>
+                </div>
                 <span>Deploying...</span>
             `;
             btn.disabled = true;
@@ -416,7 +731,7 @@ class DeploylyApp {
             anime({
                 targets: btn,
                 scale: [1, 0.98, 1],
-                duration: 1000,
+                duration: 1500,
                 loop: true,
                 easing: 'easeInOutSine'
             });
@@ -432,12 +747,8 @@ class DeploylyApp {
         
         if (show) {
             modal.classList.add('show');
-            
-            // Animate progress
             this.animateProgress();
-            
-            // Animate loading particles
-            this.animateLoadingParticles();
+            this.animateLoadingElements();
         } else {
             modal.classList.remove('show');
         }
@@ -450,7 +761,7 @@ class DeploylyApp {
         anime({
             targets: progressFill,
             width: ['0%', '100%'],
-            duration: 3000,
+            duration: 4000,
             easing: 'easeInOutQuad',
             update: function(anim) {
                 const percent = Math.round(anim.progress);
@@ -459,18 +770,41 @@ class DeploylyApp {
         });
     }
 
-    animateLoadingParticles() {
-        const particles = document.querySelectorAll('.particle');
-        
+    animateLoadingElements() {
+        // Animate loading orb
+        const orb = document.querySelector('.loading-orb .orb-core');
+        anime({
+            targets: orb,
+            scale: [1, 1.2, 1],
+            duration: 2000,
+            loop: true,
+            easing: 'easeInOutSine'
+        });
+
+        // Animate particles
+        const particles = document.querySelectorAll('.loading-particles .particle');
         particles.forEach((particle, index) => {
             anime({
                 targets: particle,
                 scale: [0, 1, 0],
                 opacity: [0, 1, 0],
                 duration: 2000,
-                delay: index * 400,
+                delay: index * 300,
                 loop: true,
                 easing: 'easeInOutSine'
+            });
+        });
+
+        // Animate title letters
+        const letters = document.querySelectorAll('.loading-title .title-letter');
+        letters.forEach((letter, index) => {
+            anime({
+                targets: letter,
+                translateY: [20, 0],
+                opacity: [0, 1],
+                duration: 500,
+                delay: index * 100,
+                easing: 'easeOutExpo'
             });
         });
     }
@@ -481,30 +815,37 @@ class DeploylyApp {
         const modal = document.getElementById('resultsModal');
         const filesList = document.getElementById('filesList');
         
-        // Clear previous results
         filesList.innerHTML = '';
         
-        // Populate files list
+        // Enhanced file list animation
         Object.keys(files).forEach((filename, index) => {
             const fileItem = this.createFileItem(filename, files[filename], index);
             filesList.appendChild(fileItem);
         });
 
-        // Show preview if index.html exists
         if (files['index.html']) {
             this.showPreview(files['index.html']);
         }
 
-        // Show modal with animation
         modal.classList.add('show');
         
-        // Animate file items
+        // Enhanced file items animation
         anime({
             targets: '.file-item',
-            translateX: [50, 0],
+            translateX: [100, 0],
             opacity: [0, 1],
-            duration: 500,
+            duration: 600,
             delay: anime.stagger(100),
+            easing: 'easeOutExpo'
+        });
+
+        // Animate modal content
+        anime({
+            targets: '.results-content > *',
+            translateY: [50, 0],
+            opacity: [0, 1],
+            duration: 800,
+            delay: anime.stagger(200),
             easing: 'easeOutExpo'
         });
     }
@@ -514,10 +855,13 @@ class DeploylyApp {
         fileItem.className = 'file-item';
         fileItem.style.opacity = '0';
         
+        const fileExtension = filename.split('.').pop();
+        const iconClass = this.getFileIcon(fileExtension);
+        
         fileItem.innerHTML = `
             <div class="file-info">
                 <div class="file-icon">
-                    <i class="fas fa-file-code"></i>
+                    <i class="${iconClass}"></i>
                 </div>
                 <div>
                     <div class="file-name">${filename}</div>
@@ -532,17 +876,28 @@ class DeploylyApp {
         return fileItem;
     }
 
+    getFileIcon(extension) {
+        const iconMap = {
+            'html': 'fab fa-html5',
+            'css': 'fab fa-css3-alt',
+            'js': 'fab fa-js-square',
+            'py': 'fab fa-python',
+            'json': 'fas fa-code',
+            'sql': 'fas fa-database'
+        };
+        return iconMap[extension] || 'fas fa-file-code';
+    }
+
     showPreview(htmlContent) {
         const previewFrame = document.getElementById('previewFrame');
         const blob = new Blob([htmlContent], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         previewFrame.src = url;
 
-        // Animate preview frame
         anime({
             targets: previewFrame,
             opacity: [0, 1],
-            duration: 500,
+            duration: 800,
             easing: 'easeOutQuad'
         });
     }
@@ -555,12 +910,12 @@ class DeploylyApp {
         deploymentLink.textContent = deploymentUrl;
         deploymentResult.classList.remove('hidden');
         
-        // Animate deployment success
         anime({
             targets: deploymentResult,
-            translateY: [-20, 0],
+            translateY: [-30, 0],
             opacity: [0, 1],
-            duration: 500,
+            scale: [0.8, 1],
+            duration: 800,
             easing: 'easeOutBack'
         });
         
@@ -569,7 +924,7 @@ class DeploylyApp {
     }
 
     createConfetti() {
-        const colors = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6'];
+        const colors = ['#6366f1', '#f59e0b', '#10b981', '#ef4444', '#8b5cf6', '#ec4899'];
         const confettiContainer = document.createElement('div');
         confettiContainer.style.cssText = `
             position: fixed;
@@ -582,31 +937,34 @@ class DeploylyApp {
         `;
         document.body.appendChild(confettiContainer);
 
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 100; i++) {
             const confetti = document.createElement('div');
+            const size = Math.random() * 8 + 4;
             confetti.style.cssText = `
                 position: absolute;
-                width: 10px;
-                height: 10px;
+                width: ${size}px;
+                height: ${size}px;
                 background: ${colors[Math.floor(Math.random() * colors.length)]};
                 left: ${Math.random() * 100}%;
-                top: -10px;
-                border-radius: 50%;
+                top: -20px;
+                border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                transform: rotate(${Math.random() * 360}deg);
             `;
             confettiContainer.appendChild(confetti);
 
             anime({
                 targets: confetti,
                 translateY: window.innerHeight + 100,
-                translateX: (Math.random() - 0.5) * 200,
-                rotate: Math.random() * 360,
-                duration: Math.random() * 2000 + 1000,
+                translateX: (Math.random() - 0.5) * 300,
+                rotate: Math.random() * 720,
+                scale: [1, 0],
+                duration: Math.random() * 2000 + 2000,
                 easing: 'easeInQuad',
                 complete: () => confetti.remove()
             });
         }
 
-        setTimeout(() => confettiContainer.remove(), 3000);
+        setTimeout(() => confettiContainer.remove(), 4000);
     }
 
     viewFile(filename) {
@@ -623,38 +981,70 @@ class DeploylyApp {
                         <style>
                             body { 
                                 font-family: 'Inter', sans-serif; 
-                                padding: 20px; 
+                                padding: 0; 
                                 background: #0a0a0f; 
                                 color: #fff;
                                 margin: 0;
+                                line-height: 1.6;
                             }
                             .header {
                                 background: linear-gradient(135deg, #667eea, #764ba2);
-                                padding: 20px;
-                                border-radius: 12px;
-                                margin-bottom: 20px;
+                                padding: 2rem;
+                                margin-bottom: 0;
+                                box-shadow: 0 4px 20px rgba(0,0,0,0.3);
                             }
                             .header h2 {
                                 margin: 0;
-                                font-size: 24px;
+                                font-size: 1.75rem;
+                                font-weight: 800;
+                                display: flex;
+                                align-items: center;
+                                gap: 1rem;
+                            }
+                            .file-info {
+                                background: rgba(255,255,255,0.1);
+                                padding: 1rem 2rem;
+                                font-size: 0.875rem;
+                                border-bottom: 1px solid rgba(255,255,255,0.1);
+                            }
+                            .code-container {
+                                padding: 2rem;
                             }
                             pre { 
                                 background: #1a1a2e !important; 
-                                padding: 20px; 
+                                padding: 2rem; 
                                 border-radius: 12px; 
                                 overflow: auto;
                                 border: 1px solid rgba(255, 255, 255, 0.1);
+                                margin: 0;
+                                box-shadow: 0 8px 32px rgba(0,0,0,0.3);
                             }
                             code {
-                                font-family: 'Fira Code', 'Consolas', monospace;
+                                font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+                                font-size: 0.875rem;
+                                line-height: 1.6;
+                            }
+                            .line-numbers {
+                                color: rgba(255,255,255,0.3);
+                                user-select: none;
                             }
                         </style>
                     </head>
                     <body>
                         <div class="header">
-                            <h2><i class="fas fa-file-code"></i> ${filename}</h2>
+                            <h2>
+                                <i class="${this.getFileIcon(filename.split('.').pop())}"></i>
+                                ${filename}
+                            </h2>
                         </div>
-                        <pre><code class="language-${this.getLanguageFromFilename(filename)}">${this.escapeHtml(content)}</code></pre>
+                        <div class="file-info">
+                            <strong>File size:</strong> ${this.formatFileSize(content.length)} characters | 
+                            <strong>Type:</strong> ${filename.split('.').pop().toUpperCase()} | 
+                            <strong>Lines:</strong> ${content.split('\n').length}
+                        </div>
+                        <div class="code-container">
+                            <pre><code class="language-${this.getLanguageFromFilename(filename)}">${this.escapeHtml(content)}</code></pre>
+                        </div>
                     </body>
                 </html>
             `);
@@ -683,27 +1073,28 @@ class DeploylyApp {
         notification.className = `notification ${type}`;
         notification.style.cssText = `
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 2rem;
+            right: 2rem;
             z-index: 10000;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 500;
+            padding: 1.25rem 2rem;
+            border-radius: 16px;
+            font-weight: 600;
             max-width: 400px;
-            backdrop-filter: blur(10px);
-            border: 1px solid;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
+            backdrop-filter: blur(20px);
+            border: 2px solid;
+            transform: translateX(120%);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
             ${type === 'error' 
-                ? 'background: rgba(239, 68, 68, 0.9); color: white; border-color: #ef4444;' 
-                : 'background: rgba(16, 185, 129, 0.9); color: white; border-color: #10b981;'
+                ? 'background: rgba(239, 68, 68, 0.95); color: white; border-color: #ef4444;' 
+                : 'background: rgba(16, 185, 129, 0.95); color: white; border-color: #10b981;'
             }
         `;
         
         notification.innerHTML = `
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i>
-                <span>${message}</span>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}" style="font-size: 1.25rem;"></i>
+                <span style="font-size: 1rem;">${message}</span>
             </div>
         `;
         
@@ -714,11 +1105,11 @@ class DeploylyApp {
             notification.style.transform = 'translateX(0)';
         }, 100);
         
-        // Auto remove
+        // Auto remove with animation
         setTimeout(() => {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => notification.remove(), 300);
-        }, 4000);
+            notification.style.transform = 'translateX(120%)';
+            setTimeout(() => notification.remove(), 400);
+        }, 5000);
     }
 
     escapeHtml(text) {
@@ -730,12 +1121,23 @@ class DeploylyApp {
 
 // Global functions for modal interactions
 function closeResults() {
-    document.getElementById('resultsModal').classList.remove('show');
+    const modal = document.getElementById('resultsModal');
+    
+    // Animate out
+    anime({
+        targets: modal.querySelector('.modal-content'),
+        scale: [1, 0.9],
+        opacity: [1, 0],
+        duration: 300,
+        easing: 'easeOutQuad',
+        complete: () => {
+            modal.classList.remove('show');
+        }
+    });
 }
 
 function downloadFiles() {
     if (window.app && window.app.generatedFiles) {
-        // Create a simple download simulation
         const files = window.app.generatedFiles;
         const blob = new Blob([JSON.stringify(files, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -747,37 +1149,62 @@ function downloadFiles() {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         
-        window.app.showNotification('Files downloaded successfully!', 'success');
+        window.app.showNotification('Files downloaded successfully! 📁', 'success');
     }
 }
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     window.app = new DeploylyApp();
+    
+    // Add some initial sparkle effects
+    setTimeout(() => {
+        const sparkles = document.querySelectorAll('.sparkle, .icon-particle, .badge-particle');
+        sparkles.forEach((sparkle, index) => {
+            anime({
+                targets: sparkle,
+                scale: [0, 1, 0],
+                opacity: [0, 1, 0],
+                duration: 2000,
+                delay: index * 200,
+                loop: true,
+                easing: 'easeInOutSine'
+            });
+        });
+    }, 1000);
 });
 
-// Add mouse parallax effect
+// Enhanced mouse parallax effect
 document.addEventListener('mousemove', (e) => {
-    const orbs = document.querySelectorAll('.gradient-orb');
     const mouseX = e.clientX / window.innerWidth;
     const mouseY = e.clientY / window.innerHeight;
     
-    orbs.forEach((orb, index) => {
-        const speed = (index + 1) * 0.3;
-        const x = (mouseX - 0.5) * speed * 50;
-        const y = (mouseY - 0.5) * speed * 50;
+    // Parallax for background elements
+    const backgroundElements = document.querySelectorAll('.neural-node, .shape, .particle');
+    backgroundElements.forEach((element, index) => {
+        const speed = (index % 3 + 1) * 0.1;
+        const x = (mouseX - 0.5) * speed * 30;
+        const y = (mouseY - 0.5) * speed * 30;
         
-        orb.style.transform = `translate(${x}px, ${y}px)`;
+        element.style.transform = `translate(${x}px, ${y}px)`;
     });
 });
 
-// Add scroll-based animations for grid pattern
+// Enhanced scroll-based animations
 window.addEventListener('scroll', () => {
     const scrolled = window.pageYOffset;
-    const gridPattern = document.querySelector('.grid-pattern');
+    const rate = scrolled * -0.3;
     
-    if (gridPattern) {
-        const speed = scrolled * 0.1;
-        gridPattern.style.transform = `translate(${speed}px, ${speed}px)`;
+    // Parallax for floating elements
+    const floatingElements = document.querySelectorAll('.floating-shapes, .aurora-lights');
+    floatingElements.forEach(element => {
+        element.style.transform = `translateY(${rate}px)`;
+    });
+    
+    // Update scroll indicator
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    if (scrollIndicator) {
+        const opacity = Math.max(0, 1 - scrolled / 300);
+        scrollIndicator.style.opacity = opacity;
     }
 });

@@ -4,29 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deployly - AI Website Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-dark overflow-x-hidden">
+    <!-- Artistic Background Elements -->
+    <div class="artistic-background">
+        <div class="neural-network">
+            <div class="neural-node" style="--delay: 0s; --x: 10%; --y: 20%;"></div>
+            <div class="neural-node" style="--delay: 0.5s; --x: 30%; --y: 15%;"></div>
+            <div class="neural-node" style="--delay: 1s; --x: 60%; --y: 25%;"></div>
+            <div class="neural-node" style="--delay: 1.5s; --x: 80%; --y: 30%;"></div>
+            <div class="neural-node" style="--delay: 2s; --x: 20%; --y: 60%;"></div>
+            <div class="neural-node" style="--delay: 2.5s; --x: 70%; --y: 70%;"></div>
+            <div class="neural-node" style="--delay: 3s; --x: 90%; --y: 80%;"></div>
+            <div class="neural-node" style="--delay: 3.5s; --x: 40%; --y: 85%;"></div>
+            
+            <svg class="neural-connections" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path class="connection-line" d="M10,20 Q30,15 60,25" />
+                <path class="connection-line" d="M30,15 Q50,30 80,30" />
+                <path class="connection-line" d="M60,25 Q70,45 20,60" />
+                <path class="connection-line" d="M80,30 Q85,55 70,70" />
+                <path class="connection-line" d="M20,60 Q45,75 70,70" />
+                <path class="connection-line" d="M70,70 Q80,75 90,80" />
+                <path class="connection-line" d="M40,85 Q65,80 90,80" />
+            </svg>
+        </div>
+        
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+            <div class="shape shape-6"></div>
+        </div>
+        
+        <div class="particle-field">
+            <div class="particle" style="--delay: 0s; --duration: 8s;"></div>
+            <div class="particle" style="--delay: 1s; --duration: 10s;"></div>
+            <div class="particle" style="--delay: 2s; --duration: 12s;"></div>
+            <div class="particle" style="--delay: 3s; --duration: 9s;"></div>
+            <div class="particle" style="--delay: 4s; --duration: 11s;"></div>
+            <div class="particle" style="--delay: 5s; --duration: 7s;"></div>
+            <div class="particle" style="--delay: 6s; --duration: 13s;"></div>
+            <div class="particle" style="--delay: 7s; --duration: 8s;"></div>
+        </div>
+        
+        <div class="aurora-lights">
+            <div class="aurora aurora-1"></div>
+            <div class="aurora aurora-2"></div>
+            <div class="aurora aurora-3"></div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav class="nav-container">
         <div class="nav-content">
             <div class="nav-brand">
                 <div class="brand-icon">
                     <div class="icon-glow"></div>
+                    <div class="icon-particles">
+                        <span class="icon-particle"></span>
+                        <span class="icon-particle"></span>
+                        <span class="icon-particle"></span>
+                    </div>
                     <i class="fas fa-rocket"></i>
                 </div>
-                <span class="brand-text">Deployly</span>
+                <span class="brand-text">
+                    <span class="letter" style="--delay: 0s">D</span>
+                    <span class="letter" style="--delay: 0.1s">e</span>
+                    <span class="letter" style="--delay: 0.2s">p</span>
+                    <span class="letter" style="--delay: 0.3s">l</span>
+                    <span class="letter" style="--delay: 0.4s">o</span>
+                    <span class="letter" style="--delay: 0.5s">y</span>
+                    <span class="letter" style="--delay: 0.6s">l</span>
+                    <span class="letter" style="--delay: 0.7s">y</span>
+                </span>
             </div>
             <div class="nav-actions">
                 <button class="nav-btn secondary">
+                    <div class="btn-bg"></div>
                     <i class="fas fa-history"></i>
                     <span>History</span>
+                    <div class="btn-ripple"></div>
                 </button>
                 <button class="nav-btn primary">
+                    <div class="btn-bg"></div>
                     <i class="fas fa-user"></i>
                     <span>Account</span>
+                    <div class="btn-ripple"></div>
                 </button>
             </div>
         </div>
@@ -35,45 +103,141 @@
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-background">
-            <div class="gradient-orb orb-1"></div>
-            <div class="gradient-orb orb-2"></div>
-            <div class="gradient-orb orb-3"></div>
-            <div class="grid-pattern"></div>
+            <div class="gradient-orb orb-1">
+                <div class="orb-core"></div>
+                <div class="orb-ring ring-1"></div>
+                <div class="orb-ring ring-2"></div>
+                <div class="orb-ring ring-3"></div>
+            </div>
+            <div class="gradient-orb orb-2">
+                <div class="orb-core"></div>
+                <div class="orb-ring ring-1"></div>
+                <div class="orb-ring ring-2"></div>
+            </div>
+            <div class="gradient-orb orb-3">
+                <div class="orb-core"></div>
+                <div class="orb-ring ring-1"></div>
+            </div>
+            
+            <div class="geometric-pattern">
+                <div class="geo-shape triangle-1"></div>
+                <div class="geo-shape triangle-2"></div>
+                <div class="geo-shape circle-1"></div>
+                <div class="geo-shape circle-2"></div>
+                <div class="geo-shape hexagon-1"></div>
+                <div class="geo-shape hexagon-2"></div>
+            </div>
+            
+            <div class="grid-pattern">
+                <div class="grid-line horizontal" style="--delay: 0s;"></div>
+                <div class="grid-line horizontal" style="--delay: 0.5s;"></div>
+                <div class="grid-line horizontal" style="--delay: 1s;"></div>
+                <div class="grid-line vertical" style="--delay: 1.5s;"></div>
+                <div class="grid-line vertical" style="--delay: 2s;"></div>
+                <div class="grid-line vertical" style="--delay: 2.5s;"></div>
+            </div>
         </div>
         
         <div class="hero-content">
             <div class="hero-badge">
+                <div class="badge-glow"></div>
                 <span class="badge-icon">✨</span>
-                <span>Powered by GPT-4</span>
+                <span class="badge-text">Powered by GPT-4</span>
+                <div class="badge-particles">
+                    <span class="badge-particle"></span>
+                    <span class="badge-particle"></span>
+                    <span class="badge-particle"></span>
+                </div>
             </div>
             
             <h1 class="hero-title">
-                Build & Deploy
-                <span class="gradient-text">AI Websites</span>
-                in Minutes
+                <span class="title-line">
+                    <span class="word" data-text="Build">Build</span>
+                    <span class="word" data-text="&">&</span>
+                    <span class="word" data-text="Deploy">Deploy</span>
+                </span>
+                <span class="title-line gradient-line">
+                    <span class="word gradient-word" data-text="AI">AI</span>
+                    <span class="word gradient-word" data-text="Websites">Websites</span>
+                </span>
+                <span class="title-line">
+                    <span class="word" data-text="in">in</span>
+                    <span class="word" data-text="Minutes">Minutes</span>
+                </span>
+                <div class="title-underline">
+                    <div class="underline-fill"></div>
+                </div>
             </h1>
             
             <p class="hero-subtitle">
-                Transform your business idea into a fully functional e-commerce website with AI. 
-                No coding required, just describe your vision.
+                <span class="subtitle-word" style="--delay: 0s">Transform</span>
+                <span class="subtitle-word" style="--delay: 0.1s">your</span>
+                <span class="subtitle-word" style="--delay: 0.2s">business</span>
+                <span class="subtitle-word" style="--delay: 0.3s">idea</span>
+                <span class="subtitle-word" style="--delay: 0.4s">into</span>
+                <span class="subtitle-word" style="--delay: 0.5s">a</span>
+                <span class="subtitle-word" style="--delay: 0.6s">fully</span>
+                <span class="subtitle-word" style="--delay: 0.7s">functional</span>
+                <span class="subtitle-word" style="--delay: 0.8s">e-commerce</span>
+                <span class="subtitle-word" style="--delay: 0.9s">website</span>
+                <span class="subtitle-word" style="--delay: 1s">with</span>
+                <span class="subtitle-word" style="--delay: 1.1s">AI.</span>
+                <br>
+                <span class="subtitle-word" style="--delay: 1.2s">No</span>
+                <span class="subtitle-word" style="--delay: 1.3s">coding</span>
+                <span class="subtitle-word" style="--delay: 1.4s">required,</span>
+                <span class="subtitle-word" style="--delay: 1.5s">just</span>
+                <span class="subtitle-word" style="--delay: 1.6s">describe</span>
+                <span class="subtitle-word" style="--delay: 1.7s">your</span>
+                <span class="subtitle-word" style="--delay: 1.8s">vision.</span>
             </p>
             
             <div class="hero-stats">
                 <div class="stat-item">
-                    <div class="stat-number">10K+</div>
-                    <div class="stat-label">Websites Created</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-globe"></i>
+                        <div class="icon-pulse"></div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="10000">0</div>
+                        <div class="stat-label">Websites Created</div>
+                    </div>
                 </div>
-                <div class="stat-divider"></div>
-                <div class="stat-item">
-                    <div class="stat-number">99.9%</div>
-                    <div class="stat-label">Uptime</div>
+                <div class="stat-divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-dot"></div>
                 </div>
-                <div class="stat-divider"></div>
                 <div class="stat-item">
-                    <div class="stat-number">< 2min</div>
-                    <div class="stat-label">Deploy Time</div>
+                    <div class="stat-icon">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="icon-pulse"></div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="99.9">0</div>
+                        <div class="stat-label">% Uptime</div>
+                    </div>
+                </div>
+                <div class="stat-divider">
+                    <div class="divider-line"></div>
+                    <div class="divider-dot"></div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-rocket"></i>
+                        <div class="icon-pulse"></div>
+                    </div>
+                    <div class="stat-content">
+                        <div class="stat-number" data-target="2">0</div>
+                        <div class="stat-label">min Deploy Time</div>
+                    </div>
                 </div>
             </div>
+        </div>
+        
+        <div class="scroll-indicator">
+            <div class="scroll-line"></div>
+            <div class="scroll-dot"></div>
+            <span class="scroll-text">Scroll to explore</span>
         </div>
     </section>
 
@@ -81,8 +245,23 @@
     <section class="generator-section">
         <div class="section-container">
             <div class="generator-card">
+                <div class="card-background">
+                    <div class="card-mesh"></div>
+                    <div class="card-glow"></div>
+                </div>
+                
                 <div class="card-header">
-                    <h2 class="card-title">Describe Your Vision</h2>
+                    <div class="header-icon">
+                        <i class="fas fa-magic"></i>
+                        <div class="icon-orbit">
+                            <div class="orbit-ring"></div>
+                            <div class="orbit-dot"></div>
+                        </div>
+                    </div>
+                    <h2 class="card-title">
+                        <span class="title-part">Describe</span>
+                        <span class="title-part gradient">Your Vision</span>
+                    </h2>
                     <p class="card-subtitle">Our AI will transform your business description into a complete website</p>
                 </div>
                 
@@ -90,10 +269,17 @@
                     <div class="form-row">
                         <div class="input-group full-width">
                             <label class="input-label">
-                                <i class="fas fa-lightbulb"></i>
-                                Business Description
+                                <div class="label-icon">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <div class="icon-glow"></div>
+                                </div>
+                                <span class="label-text">Business Description</span>
+                                <div class="label-line"></div>
                             </label>
                             <div class="textarea-container">
+                                <div class="input-background">
+                                    <div class="input-mesh"></div>
+                                </div>
                                 <textarea 
                                     id="businessDescription" 
                                     class="form-textarea"
@@ -102,8 +288,10 @@
                                     required
                                 ></textarea>
                                 <div class="textarea-counter">
+                                    <div class="counter-bg"></div>
                                     <span id="charCount">0</span> / 1000
                                 </div>
+                                <div class="input-focus-line"></div>
                             </div>
                         </div>
                     </div>
@@ -111,24 +299,41 @@
                     <div class="form-row">
                         <div class="input-group">
                             <label class="input-label">
-                                <i class="fas fa-tag"></i>
-                                Project Name
+                                <div class="label-icon">
+                                    <i class="fas fa-tag"></i>
+                                    <div class="icon-glow"></div>
+                                </div>
+                                <span class="label-text">Project Name</span>
+                                <div class="label-line"></div>
                             </label>
-                            <input 
-                                type="text" 
-                                id="projectName" 
-                                class="form-input"
-                                placeholder="my-awesome-store"
-                                required
-                            >
+                            <div class="input-wrapper">
+                                <div class="input-background">
+                                    <div class="input-mesh"></div>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    id="projectName" 
+                                    class="form-input"
+                                    placeholder="my-awesome-store"
+                                    required
+                                >
+                                <div class="input-focus-line"></div>
+                            </div>
                         </div>
                         
                         <div class="input-group">
                             <label class="input-label">
-                                <i class="fas fa-palette"></i>
-                                Design Style
+                                <div class="label-icon">
+                                    <i class="fas fa-palette"></i>
+                                    <div class="icon-glow"></div>
+                                </div>
+                                <span class="label-text">Design Style</span>
+                                <div class="label-line"></div>
                             </label>
                             <div class="select-container">
+                                <div class="input-background">
+                                    <div class="input-mesh"></div>
+                                </div>
                                 <select id="theme" class="form-select">
                                     <option value="modern">Modern & Clean</option>
                                     <option value="minimal">Minimal & Elegant</option>
@@ -136,23 +341,38 @@
                                     <option value="professional">Professional & Corporate</option>
                                     <option value="creative">Creative & Artistic</option>
                                 </select>
-                                <i class="fas fa-chevron-down select-arrow"></i>
+                                <div class="select-arrow">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <div class="input-focus-line"></div>
                             </div>
                         </div>
                     </div>
                     
                     <button type="submit" id="generateBtn" class="generate-button">
+                        <div class="button-background">
+                            <div class="button-mesh"></div>
+                            <div class="button-glow"></div>
+                        </div>
                         <div class="button-content">
                             <div class="button-icon">
                                 <i class="fas fa-magic"></i>
+                                <div class="icon-sparkles">
+                                    <span class="sparkle"></span>
+                                    <span class="sparkle"></span>
+                                    <span class="sparkle"></span>
+                                </div>
                             </div>
                             <span class="button-text">Generate Website</span>
                         </div>
                         <div class="button-loading hidden">
-                            <div class="loading-spinner"></div>
+                            <div class="loading-spinner">
+                                <div class="spinner-ring"></div>
+                                <div class="spinner-dot"></div>
+                            </div>
                             <span>Creating Magic...</span>
                         </div>
-                        <div class="button-glow"></div>
+                        <div class="button-ripple"></div>
                     </button>
                 </form>
             </div>
@@ -161,59 +381,151 @@
 
     <!-- Features Section -->
     <section class="features-section">
+        <div class="features-background">
+            <div class="feature-mesh"></div>
+            <div class="feature-waves">
+                <div class="wave wave-1"></div>
+                <div class="wave wave-2"></div>
+                <div class="wave wave-3"></div>
+            </div>
+        </div>
+        
         <div class="section-container">
             <div class="section-header">
-                <h2 class="section-title">Why Choose Deployly?</h2>
+                <div class="header-decoration">
+                    <div class="decoration-line"></div>
+                    <div class="decoration-dot"></div>
+                    <div class="decoration-line"></div>
+                </div>
+                <h2 class="section-title">
+                    <span class="title-word" style="--delay: 0s">Why</span>
+                    <span class="title-word" style="--delay: 0.1s">Choose</span>
+                    <span class="title-word gradient" style="--delay: 0.2s">Deployly?</span>
+                </h2>
                 <p class="section-subtitle">Everything you need to launch your online business</p>
             </div>
             
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card" data-feature="ai">
+                    <div class="card-background">
+                        <div class="card-mesh"></div>
+                        <div class="card-glow"></div>
+                    </div>
                     <div class="feature-icon ai">
+                        <div class="icon-background">
+                            <div class="icon-mesh"></div>
+                        </div>
                         <i class="fas fa-brain"></i>
+                        <div class="icon-particles">
+                            <span class="particle"></span>
+                            <span class="particle"></span>
+                            <span class="particle"></span>
+                        </div>
                     </div>
                     <h3 class="feature-title">AI-Powered</h3>
                     <p class="feature-description">Advanced GPT-4 creates custom websites tailored to your exact business needs</p>
+                    <div class="feature-hover-effect"></div>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card" data-feature="deploy">
+                    <div class="card-background">
+                        <div class="card-mesh"></div>
+                        <div class="card-glow"></div>
+                    </div>
                     <div class="feature-icon deploy">
+                        <div class="icon-background">
+                            <div class="icon-mesh"></div>
+                        </div>
                         <i class="fas fa-rocket"></i>
+                        <div class="icon-trail">
+                            <span class="trail-dot"></span>
+                            <span class="trail-dot"></span>
+                            <span class="trail-dot"></span>
+                        </div>
                     </div>
                     <h3 class="feature-title">Instant Deploy</h3>
                     <p class="feature-description">Go live in seconds with global CDN and automatic SSL certificates</p>
+                    <div class="feature-hover-effect"></div>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card" data-feature="payment">
+                    <div class="card-background">
+                        <div class="card-mesh"></div>
+                        <div class="card-glow"></div>
+                    </div>
                     <div class="feature-icon payment">
+                        <div class="icon-background">
+                            <div class="icon-mesh"></div>
+                        </div>
                         <i class="fas fa-credit-card"></i>
+                        <div class="icon-waves">
+                            <span class="wave"></span>
+                            <span class="wave"></span>
+                        </div>
                     </div>
                     <h3 class="feature-title">Payment Ready</h3>
                     <p class="feature-description">Built-in payment processing with secure checkout and order management</p>
+                    <div class="feature-hover-effect"></div>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card" data-feature="responsive">
+                    <div class="card-background">
+                        <div class="card-mesh"></div>
+                        <div class="card-glow"></div>
+                    </div>
                     <div class="feature-icon responsive">
+                        <div class="icon-background">
+                            <div class="icon-mesh"></div>
+                        </div>
                         <i class="fas fa-mobile-alt"></i>
+                        <div class="icon-rings">
+                            <span class="ring"></span>
+                            <span class="ring"></span>
+                        </div>
                     </div>
                     <h3 class="feature-title">Mobile First</h3>
                     <p class="feature-description">Responsive design that looks perfect on all devices and screen sizes</p>
+                    <div class="feature-hover-effect"></div>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card" data-feature="seo">
+                    <div class="card-background">
+                        <div class="card-mesh"></div>
+                        <div class="card-glow"></div>
+                    </div>
                     <div class="feature-icon seo">
+                        <div class="icon-background">
+                            <div class="icon-mesh"></div>
+                        </div>
                         <i class="fas fa-search"></i>
+                        <div class="icon-radar">
+                            <span class="radar-sweep"></span>
+                        </div>
                     </div>
                     <h3 class="feature-title">SEO Optimized</h3>
                     <p class="feature-description">Built-in SEO best practices to help your website rank higher</p>
+                    <div class="feature-hover-effect"></div>
                 </div>
                 
-                <div class="feature-card">
+                <div class="feature-card" data-feature="analytics">
+                    <div class="card-background">
+                        <div class="card-mesh"></div>
+                        <div class="card-glow"></div>
+                    </div>
                     <div class="feature-icon analytics">
+                        <div class="icon-background">
+                            <div class="icon-mesh"></div>
+                        </div>
                         <i class="fas fa-chart-line"></i>
+                        <div class="icon-chart">
+                            <span class="chart-bar" style="--height: 60%;"></span>
+                            <span class="chart-bar" style="--height: 80%;"></span>
+                            <span class="chart-bar" style="--height: 40%;"></span>
+                        </div>
                     </div>
                     <h3 class="feature-title">Analytics</h3>
                     <p class="feature-description">Track visitors, sales, and performance with integrated analytics</p>
+                    <div class="feature-hover-effect"></div>
                 </div>
             </div>
         </div>
@@ -223,20 +535,56 @@
     <div id="loadingModal" class="modal-overlay">
         <div class="modal-content loading-modal">
             <div class="loading-animation">
-                <div class="loading-orb"></div>
+                <div class="loading-orb">
+                    <div class="orb-core"></div>
+                    <div class="orb-rings">
+                        <div class="ring"></div>
+                        <div class="ring"></div>
+                        <div class="ring"></div>
+                    </div>
+                </div>
                 <div class="loading-particles">
                     <div class="particle"></div>
                     <div class="particle"></div>
                     <div class="particle"></div>
                     <div class="particle"></div>
                     <div class="particle"></div>
+                    <div class="particle"></div>
+                </div>
+                <div class="loading-waves">
+                    <div class="wave"></div>
+                    <div class="wave"></div>
+                    <div class="wave"></div>
                 </div>
             </div>
-            <h3 class="loading-title">Crafting Your Website</h3>
+            <h3 class="loading-title">
+                <span class="title-letter" style="--delay: 0s">C</span>
+                <span class="title-letter" style="--delay: 0.1s">r</span>
+                <span class="title-letter" style="--delay: 0.2s">a</span>
+                <span class="title-letter" style="--delay: 0.3s">f</span>
+                <span class="title-letter" style="--delay: 0.4s">t</span>
+                <span class="title-letter" style="--delay: 0.5s">i</span>
+                <span class="title-letter" style="--delay: 0.6s">n</span>
+                <span class="title-letter" style="--delay: 0.7s">g</span>
+                <span class="title-letter" style="--delay: 0.8s"> </span>
+                <span class="title-letter" style="--delay: 0.9s">Y</span>
+                <span class="title-letter" style="--delay: 1s">o</span>
+                <span class="title-letter" style="--delay: 1.1s">u</span>
+                <span class="title-letter" style="--delay: 1.2s">r</span>
+                <span class="title-letter" style="--delay: 1.3s"> </span>
+                <span class="title-letter" style="--delay: 1.4s">W</span>
+                <span class="title-letter" style="--delay: 1.5s">e</span>
+                <span class="title-letter" style="--delay: 1.6s">b</span>
+                <span class="title-letter" style="--delay: 1.7s">s</span>
+                <span class="title-letter" style="--delay: 1.8s">i</span>
+                <span class="title-letter" style="--delay: 1.9s">t</span>
+                <span class="title-letter" style="--delay: 2s">e</span>
+            </h3>
             <p class="loading-text">Our AI is analyzing your requirements and generating custom code...</p>
             <div class="progress-container">
                 <div class="progress-bar">
                     <div class="progress-fill"></div>
+                    <div class="progress-glow"></div>
                 </div>
                 <div class="progress-text">
                     <span id="progressPercent">0%</span>
@@ -249,15 +597,22 @@
     <div id="resultsModal" class="modal-overlay">
         <div class="modal-content results-modal">
             <div class="modal-header">
-                <h3 class="modal-title">🎉 Your Website is Ready!</h3>
+                <h3 class="modal-title">
+                    <span class="title-emoji">🎉</span>
+                    <span class="title-text">Your Website is Ready!</span>
+                </h3>
                 <button class="modal-close" onclick="closeResults()">
                     <i class="fas fa-times"></i>
+                    <div class="close-ripple"></div>
                 </button>
             </div>
             
             <div class="results-content">
                 <div class="preview-section">
-                    <h4 class="section-title">Preview</h4>
+                    <h4 class="section-title">
+                        <i class="fas fa-eye"></i>
+                        Preview
+                    </h4>
                     <div class="preview-container">
                         <div class="browser-mockup">
                             <div class="browser-header">
@@ -266,7 +621,13 @@
                                     <span class="control yellow"></span>
                                     <span class="control green"></span>
                                 </div>
-                                <div class="browser-url">localhost:3000</div>
+                                <div class="browser-url">
+                                    <i class="fas fa-lock"></i>
+                                    localhost:3000
+                                </div>
+                                <div class="browser-actions">
+                                    <i class="fas fa-refresh"></i>
+                                </div>
                             </div>
                             <iframe id="previewFrame" class="preview-frame"></iframe>
                         </div>
@@ -274,15 +635,26 @@
                 </div>
                 
                 <div class="actions-section">
-                    <h4 class="section-title">Next Steps</h4>
+                    <h4 class="section-title">
+                        <i class="fas fa-rocket"></i>
+                        Next Steps
+                    </h4>
                     <div class="action-buttons">
                         <button id="deployBtn" class="action-button primary">
+                            <div class="button-background">
+                                <div class="button-mesh"></div>
+                            </div>
                             <i class="fas fa-rocket"></i>
                             <span>Deploy Now</span>
+                            <div class="button-ripple"></div>
                         </button>
                         <button class="action-button secondary" onclick="downloadFiles()">
+                            <div class="button-background">
+                                <div class="button-mesh"></div>
+                            </div>
                             <i class="fas fa-download"></i>
                             <span>Download Files</span>
+                            <div class="button-ripple"></div>
                         </button>
                     </div>
                     
@@ -295,7 +667,10 @@
             </div>
             
             <div class="files-section">
-                <h4 class="section-title">Generated Files</h4>
+                <h4 class="section-title">
+                    <i class="fas fa-code"></i>
+                    Generated Files
+                </h4>
                 <div id="filesList" class="files-list"></div>
             </div>
         </div>
@@ -303,10 +678,15 @@
 
     <!-- Footer -->
     <footer class="footer">
+        <div class="footer-background">
+            <div class="footer-mesh"></div>
+            <div class="footer-glow"></div>
+        </div>
         <div class="footer-content">
             <div class="footer-brand">
                 <div class="brand-icon">
                     <i class="fas fa-rocket"></i>
+                    <div class="icon-glow"></div>
                 </div>
                 <span class="brand-text">Deployly</span>
             </div>
@@ -314,12 +694,15 @@
             <div class="footer-links">
                 <a href="#" class="footer-link">
                     <i class="fab fa-twitter"></i>
+                    <div class="link-ripple"></div>
                 </a>
                 <a href="#" class="footer-link">
                     <i class="fab fa-github"></i>
+                    <div class="link-ripple"></div>
                 </a>
                 <a href="#" class="footer-link">
                     <i class="fab fa-discord"></i>
+                    <div class="link-ripple"></div>
                 </a>
             </div>
         </div>
