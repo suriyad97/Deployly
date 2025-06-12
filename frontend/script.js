@@ -11,6 +11,7 @@ class DeploylyApp {
         this.setupCharacterCounter();
         this.setupCounterAnimations();
         this.setupParallaxEffects();
+        this.initCustomSelect();
     }
 
     bindEvents() {
@@ -30,8 +31,114 @@ class DeploylyApp {
         this.setupMouseEffects();
     }
 
+    initCustomSelect() {
+        const selectTrigger = document.getElementById('selectTrigger');
+        const selectDropdown = document.getElementById('selectDropdown');
+        const selectOptions = document.querySelectorAll('.select-option');
+        const hiddenSelect = document.getElementById('theme');
+
+        // Toggle dropdown
+        selectTrigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = selectDropdown.classList.contains('show');
+            
+            if (isOpen) {
+                this.closeCustomSelect();
+            } else {
+                this.openCustomSelect();
+            }
+        });
+
+        // Handle option selection
+        selectOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.selectOption(option);
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!selectTrigger.contains(e.target) && !selectDropdown.contains(e.target)) {
+                this.closeCustomSelect();
+            }
+        });
+
+        // Close dropdown on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                this.closeCustomSelect();
+            }
+        });
+    }
+
+    openCustomSelect() {
+        const selectTrigger = document.getElementById('selectTrigger');
+        const selectDropdown = document.getElementById('selectDropdown');
+        
+        selectTrigger.classList.add('active');
+        selectDropdown.classList.add('show');
+        
+        // Animate options
+        const options = selectDropdown.querySelectorAll('.select-option');
+        anime({
+            targets: options,
+            translateX: [-20, 0],
+            opacity: [0, 1],
+            duration: 300,
+            delay: anime.stagger(50),
+            easing: 'easeOutQuad'
+        });
+    }
+
+    closeCustomSelect() {
+        const selectTrigger = document.getElementById('selectTrigger');
+        const selectDropdown = document.getElementById('selectDropdown');
+        
+        selectTrigger.classList.remove('active');
+        selectDropdown.classList.remove('show');
+    }
+
+    selectOption(option) {
+        const selectTrigger = document.getElementById('selectTrigger');
+        const selectText = selectTrigger.querySelector('.select-text');
+        const selectIcon = selectTrigger.querySelector('.select-icon i');
+        const hiddenSelect = document.getElementById('theme');
+        
+        // Remove selected class from all options
+        document.querySelectorAll('.select-option').forEach(opt => {
+            opt.classList.remove('selected');
+        });
+        
+        // Add selected class to clicked option
+        option.classList.add('selected');
+        
+        // Update trigger display
+        const optionText = option.querySelector('.option-text').textContent;
+        const optionIcon = option.querySelector('.option-icon i').className;
+        const optionValue = option.dataset.value;
+        
+        selectText.textContent = optionText;
+        selectIcon.className = optionIcon;
+        hiddenSelect.value = optionValue;
+        
+        // Animate selection
+        anime({
+            targets: selectTrigger,
+            scale: [1, 1.02, 1],
+            duration: 300,
+            easing: 'easeOutElastic(1, .6)'
+        });
+        
+        // Close dropdown
+        this.closeCustomSelect();
+        
+        // Trigger change event
+        hiddenSelect.dispatchEvent(new Event('change'));
+    }
+
     setupInputInteractions() {
-        const inputs = document.querySelectorAll('.form-input, .form-textarea, .form-select');
+        const inputs = document.querySelectorAll('.form-input, .form-textarea');
         
         inputs.forEach(input => {
             input.addEventListener('focus', (e) => this.animateInputFocus(e.target));
