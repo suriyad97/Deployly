@@ -2,6 +2,9 @@ class DeploylyApp {
     constructor() {
         this.apiBaseUrl = 'http://localhost:8000/api';
         this.generatedFiles = {};
+        this.scrollTicking = false;
+        this.lastScrollY = 0;
+        this.scrollDirection = 'down';
         this.init();
     }
 
@@ -10,7 +13,7 @@ class DeploylyApp {
         this.initAnimations();
         this.setupCharacterCounter();
         this.setupCounterAnimations();
-        this.setupParallaxEffects();
+        this.setupSmoothParallax();
         this.initCustomSelect();
     }
 
@@ -24,8 +27,8 @@ class DeploylyApp {
         // Enhanced input interactions
         this.setupInputInteractions();
         
-        // Setup scroll effects
-        this.setupScrollEffects();
+        // Setup improved scroll effects
+        this.setupSmoothScrollEffects();
         
         // Setup mouse effects
         this.setupMouseEffects();
@@ -211,75 +214,164 @@ class DeploylyApp {
         });
     }
 
-    setupParallaxEffects() {
+    setupSmoothParallax() {
+        let mouseX = 0;
+        let mouseY = 0;
+        let targetX = 0;
+        let targetY = 0;
+
         document.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
+            targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+
+        // Smooth interpolation for mouse parallax
+        const updateMouseParallax = () => {
+            mouseX += (targetX - mouseX) * 0.1;
+            mouseY += (targetY - mouseY) * 0.1;
             
-            // Parallax for floating shapes
+            // Subtle parallax for floating shapes
             const shapes = document.querySelectorAll('.shape, .neural-node');
             shapes.forEach((shape, index) => {
-                const speed = (index + 1) * 0.2;
-                const x = (mouseX - 0.5) * speed * 30;
-                const y = (mouseY - 0.5) * speed * 30;
+                const speed = (index % 3 + 1) * 0.05; // Reduced speed for smoother effect
+                const x = mouseX * speed * 15; // Reduced movement range
+                const y = mouseY * speed * 15;
                 
-                anime({
-                    targets: shape,
-                    translateX: x,
-                    translateY: y,
-                    duration: 1000,
-                    easing: 'easeOutQuad'
-                });
+                shape.style.transform = `translate3d(${x}px, ${y}px, 0)`;
             });
 
-            // Parallax for orbs
+            // Very subtle parallax for orbs
             const orbs = document.querySelectorAll('.gradient-orb');
             orbs.forEach((orb, index) => {
-                const speed = (index + 1) * 0.1;
-                const x = (mouseX - 0.5) * speed * 50;
-                const y = (mouseY - 0.5) * speed * 50;
+                const speed = (index + 1) * 0.02; // Much more subtle
+                const x = mouseX * speed * 20;
+                const y = mouseY * speed * 20;
                 
-                anime({
-                    targets: orb,
-                    translateX: x,
-                    translateY: y,
-                    duration: 1500,
-                    easing: 'easeOutQuad'
-                });
+                orb.style.transform = `translate3d(${x}px, ${y}px, 0)`;
             });
-        });
+
+            requestAnimationFrame(updateMouseParallax);
+        };
+
+        updateMouseParallax();
     }
 
-    setupScrollEffects() {
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const rate = scrolled * -0.5;
-            
-            // Parallax background elements
+    setupSmoothScrollEffects() {
+        let scrollY = 0;
+        let targetScrollY = 0;
+
+        const updateScroll = () => {
+            targetScrollY = window.pageYOffset;
+            scrollY += (targetScrollY - scrollY) * 0.1; // Smooth interpolation
+
+            // Track scroll direction
+            if (targetScrollY > this.lastScrollY) {
+                this.scrollDirection = 'down';
+            } else if (targetScrollY < this.lastScrollY) {
+                this.scrollDirection = 'up';
+            }
+            this.lastScrollY = targetScrollY;
+
+            // Smooth parallax for background elements
             const backgroundElements = document.querySelectorAll('.neural-network, .floating-shapes');
             backgroundElements.forEach(element => {
-                anime({
-                    targets: element,
-                    translateY: rate,
-                    duration: 0,
-                    easing: 'linear'
-                });
+                const rate = scrollY * -0.2; // Reduced parallax intensity
+                element.style.transform = `translate3d(0, ${rate}px, 0)`;
             });
 
-            // Update navigation background
+            // Smooth parallax for aurora lights
+            const auroraLights = document.querySelector('.aurora-lights');
+            if (auroraLights) {
+                const rate = scrollY * -0.15;
+                auroraLights.style.transform = `translate3d(0, ${rate}px, 0)`;
+            }
+
+            // Smooth navigation background transition
             const nav = document.querySelector('.nav-container');
-            if (scrolled > 100) {
-                nav.style.background = 'rgba(10, 10, 15, 0.95)';
-                nav.style.backdropFilter = 'blur(30px)';
-            } else {
-                nav.style.background = 'rgba(10, 10, 15, 0.8)';
-                nav.style.backdropFilter = 'blur(20px)';
+            const scrollProgress = Math.min(scrollY / 200, 1); // Smooth transition over 200px
+            const opacity = 0.8 + (scrollProgress * 0.15); // From 0.8 to 0.95
+            const blur = 20 + (scrollProgress * 10); // From 20px to 30px
+            
+            nav.style.background = `rgba(10, 10, 15, ${opacity})`;
+            nav.style.backdropFilter = `blur(${blur}px)`;
+
+            // Update scroll indicator with smooth fade
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (scrollIndicator) {
+                const fadeProgress = Math.min(scrollY / 300, 1);
+                const opacity = Math.max(0, 1 - fadeProgress);
+                scrollIndicator.style.opacity = opacity;
+                scrollIndicator.style.transform = `translateY(${scrollY * 0.5}px)`;
+            }
+
+            // Smooth reveal animations for sections
+            this.updateSectionVisibility(scrollY);
+
+            requestAnimationFrame(updateScroll);
+        };
+
+        updateScroll();
+
+        // Add scroll-based section animations
+        window.addEventListener('scroll', () => {
+            if (!this.scrollTicking) {
+                requestAnimationFrame(() => {
+                    this.handleScrollAnimations();
+                    this.scrollTicking = false;
+                });
+                this.scrollTicking = true;
             }
         });
     }
 
+    updateSectionVisibility(scrollY) {
+        const sections = document.querySelectorAll('.hero-section, .generator-section, .features-section');
+        
+        sections.forEach((section, index) => {
+            const rect = section.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+            
+            if (isVisible) {
+                const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / window.innerHeight));
+                
+                // Subtle scale and opacity effects
+                const scale = 0.98 + (progress * 0.02);
+                const opacity = 0.7 + (progress * 0.3);
+                
+                section.style.transform = `scale(${scale})`;
+                section.style.opacity = opacity;
+            }
+        });
+    }
+
+    handleScrollAnimations() {
+        const scrolled = window.pageYOffset;
+        
+        // Smooth hero content movement
+        const heroContent = document.querySelector('.hero-content');
+        if (heroContent) {
+            const rate = scrolled * 0.3;
+            heroContent.style.transform = `translateY(${rate}px)`;
+        }
+
+        // Smooth geometric pattern movement
+        const geoPattern = document.querySelector('.geometric-pattern');
+        if (geoPattern) {
+            const rate = scrolled * -0.1;
+            geoPattern.style.transform = `translateY(${rate}px) rotate(${scrolled * 0.05}deg)`;
+        }
+
+        // Smooth particle movement
+        const particles = document.querySelectorAll('.particle');
+        particles.forEach((particle, index) => {
+            const speed = (index % 3 + 1) * 0.1;
+            const rate = scrolled * speed;
+            particle.style.transform = `translateY(${rate}px)`;
+        });
+    }
+
     setupMouseEffects() {
-        // Magnetic effect for buttons
+        // Reduced magnetic effect for buttons
         const magneticElements = document.querySelectorAll('.generate-button, .action-button');
         
         magneticElements.forEach(element => {
@@ -288,23 +380,17 @@ class DeploylyApp {
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
                 
-                anime({
-                    targets: element,
-                    translateX: x * 0.1,
-                    translateY: y * 0.1,
-                    duration: 200,
-                    easing: 'easeOutQuad'
-                });
+                // Reduced magnetic strength
+                element.style.transform = `translate(${x * 0.05}px, ${y * 0.05}px)`;
             });
 
             element.addEventListener('mouseleave', () => {
-                anime({
-                    targets: element,
-                    translateX: 0,
-                    translateY: 0,
-                    duration: 300,
-                    easing: 'easeOutElastic(1, .6)'
-                });
+                element.style.transform = 'translate(0, 0)';
+                element.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            });
+
+            element.addEventListener('mouseenter', () => {
+                element.style.transition = 'none';
             });
         });
     }
@@ -460,58 +546,58 @@ class DeploylyApp {
     }
 
     animateFloatingElements() {
-        // Enhanced floating animations for neural nodes
+        // More subtle floating animations for neural nodes
         const neuralNodes = document.querySelectorAll('.neural-node');
         neuralNodes.forEach((node, index) => {
             anime({
                 targets: node,
                 translateY: [
-                    { value: -20, duration: 2000 },
-                    { value: 20, duration: 2000 },
-                    { value: 0, duration: 2000 }
+                    { value: -10, duration: 3000 },
+                    { value: 10, duration: 3000 },
+                    { value: 0, duration: 3000 }
                 ],
                 translateX: [
-                    { value: 15, duration: 3000 },
-                    { value: -15, duration: 3000 },
-                    { value: 0, duration: 2000 }
+                    { value: 8, duration: 4000 },
+                    { value: -8, duration: 4000 },
+                    { value: 0, duration: 3000 }
                 ],
                 scale: [
-                    { value: 1.2, duration: 1500 },
-                    { value: 0.8, duration: 1500 },
-                    { value: 1, duration: 1500 }
+                    { value: 1.05, duration: 2000 },
+                    { value: 0.95, duration: 2000 },
+                    { value: 1, duration: 2000 }
                 ],
                 loop: true,
-                delay: index * 500,
+                delay: index * 800,
                 easing: 'easeInOutSine'
             });
         });
 
-        // Enhanced orb animations
+        // More subtle orb animations
         const orbs = document.querySelectorAll('.gradient-orb');
         orbs.forEach((orb, index) => {
             anime({
                 targets: orb,
                 translateY: [
-                    { value: -50, duration: 4000 },
-                    { value: 50, duration: 4000 },
-                    { value: 0, duration: 4000 }
+                    { value: -25, duration: 6000 },
+                    { value: 25, duration: 6000 },
+                    { value: 0, duration: 6000 }
                 ],
                 translateX: [
-                    { value: 30, duration: 5000 },
-                    { value: -30, duration: 5000 },
-                    { value: 0, duration: 3000 }
+                    { value: 15, duration: 8000 },
+                    { value: -15, duration: 8000 },
+                    { value: 0, duration: 6000 }
                 ],
                 scale: [
-                    { value: 1.1, duration: 3000 },
-                    { value: 0.9, duration: 3000 },
-                    { value: 1, duration: 3000 }
+                    { value: 1.03, duration: 4000 },
+                    { value: 0.97, duration: 4000 },
+                    { value: 1, duration: 4000 }
                 ],
                 rotate: [
-                    { value: 180, duration: 8000 },
-                    { value: 360, duration: 8000 }
+                    { value: 90, duration: 12000 },
+                    { value: 180, duration: 12000 }
                 ],
                 loop: true,
-                delay: index * 2000,
+                delay: index * 3000,
                 easing: 'easeInOutSine'
             });
         });
@@ -524,9 +610,9 @@ class DeploylyApp {
             letter.addEventListener('mouseenter', () => {
                 anime({
                     targets: letter,
-                    scale: [1, 1.3, 1],
-                    rotate: [0, 360, 0],
-                    duration: 600,
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 180, 0],
+                    duration: 400,
                     easing: 'easeOutElastic(1, .6)'
                 });
             });
@@ -538,8 +624,8 @@ class DeploylyApp {
             word.addEventListener('mouseenter', () => {
                 anime({
                     targets: word,
-                    scale: [1, 1.1, 1],
-                    duration: 400,
+                    scale: [1, 1.05, 1],
+                    duration: 300,
                     easing: 'easeOutElastic(1, .8)'
                 });
             });
@@ -604,8 +690,8 @@ class DeploylyApp {
         if (isHover) {
             anime({
                 targets: card,
-                translateY: [0, -15],
-                duration: 400,
+                translateY: [0, -10],
+                duration: 300,
                 easing: 'easeOutQuad'
             });
 
@@ -613,25 +699,25 @@ class DeploylyApp {
             const icon = card.querySelector('.feature-icon');
             anime({
                 targets: icon,
-                scale: [1, 1.1],
-                rotate: [0, 5],
-                duration: 400,
+                scale: [1, 1.05],
+                rotate: [0, 3],
+                duration: 300,
                 easing: 'easeOutQuad'
             });
         } else {
             anime({
                 targets: card,
-                translateY: [-15, 0],
-                duration: 400,
+                translateY: [-10, 0],
+                duration: 300,
                 easing: 'easeOutQuad'
             });
 
             const icon = card.querySelector('.feature-icon');
             anime({
                 targets: icon,
-                scale: [1.1, 1],
-                rotate: [5, 0],
-                duration: 400,
+                scale: [1.05, 1],
+                rotate: [3, 0],
+                duration: 300,
                 easing: 'easeOutQuad'
             });
         }
@@ -1279,39 +1365,4 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }, 1000);
-});
-
-// Enhanced mouse parallax effect
-document.addEventListener('mousemove', (e) => {
-    const mouseX = e.clientX / window.innerWidth;
-    const mouseY = e.clientY / window.innerHeight;
-    
-    // Parallax for background elements
-    const backgroundElements = document.querySelectorAll('.neural-node, .shape, .particle');
-    backgroundElements.forEach((element, index) => {
-        const speed = (index % 3 + 1) * 0.1;
-        const x = (mouseX - 0.5) * speed * 30;
-        const y = (mouseY - 0.5) * speed * 30;
-        
-        element.style.transform = `translate(${x}px, ${y}px)`;
-    });
-});
-
-// Enhanced scroll-based animations
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const rate = scrolled * -0.3;
-    
-    // Parallax for floating elements
-    const floatingElements = document.querySelectorAll('.floating-shapes, .aurora-lights');
-    floatingElements.forEach(element => {
-        element.style.transform = `translateY(${rate}px)`;
-    });
-    
-    // Update scroll indicator
-    const scrollIndicator = document.querySelector('.scroll-indicator');
-    if (scrollIndicator) {
-        const opacity = Math.max(0, 1 - scrolled / 300);
-        scrollIndicator.style.opacity = opacity;
-    }
 });
